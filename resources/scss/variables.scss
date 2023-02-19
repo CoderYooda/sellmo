@@ -1,0 +1,25 @@
+//Sizes
+
+body{
+    --sidebar-width: 240px;
+    --sidebar-shown: 1;
+    --header-height: 52px;
+}
+
+//Links
+$themeSpriteLink: url('/vendor/bitex/admin/assets/images/sprites.svg');
+
+//Typography
+$baseFontFamily: Roboto, sans-serif;
+$baseFontSize: 1rem;
+$bodyFontWeight: 400;
+$bodyLineHeight: 1.5;
+
+//Colors
+$white: #fff;
+$bodyBgColor: #fff;
+$themeColor: #ffd333;
+$asideColor: #3d464d;
+$bodyFontColor: #212529;
+
+

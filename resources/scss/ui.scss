@@ -1,0 +1,62 @@
+.btn {
+    display: inline-block;
+    font-weight: 500;
+    line-height: 1.5;
+    color: #212529;
+    text-align: center;
+    vertical-align: middle;
+    cursor: pointer;
+    -webkit-user-select: none;
+    user-select: none;
+    background-color: transparent;
+    border: 2px solid transparent;
+    padding: 4px 14px;
+    font-size: 1rem;
+    border-radius: 2px;
+    transition: color 0.12s ease-in-out, background-color 0.12s ease-in-out, border-color 0.12s ease-in-out, box-shadow 0.12s ease-in-out;
+    outline: 0;
+}
+
+.btn {
+    --sa-button--normal-bg-color: #000;
+    --sa-button--normal-border-color: var(--sa-button--normal-bg-color);
+    --sa-button--normal-font-color: #fff;
+    --sa-button--hover-bg-color: var(--sa-button--normal-bg-color);
+    --sa-button--hover-border-color: var(--sa-button--hover-bg-color);
+    --sa-button--hover-font-color: var(--sa-button--normal-font-color);
+    --sa-button--active-bg-color: var(--sa-button--hover-bg-color);
+    --sa-button--active-border-color: var(--sa-button--active-bg-color);
+    --sa-button--active-font-color: var(--sa-button--hover-font-color);
+    color: var(--sa-button--normal-font-color);
+    background-color: var(--sa-button--normal-bg-color);
+    border-color: var(--sa-button--normal-border-color);
+    fill: currentColor;
+}
+.btn-primary{
+    --sa-button--normal-bg-color: #ffd333;
+    --sa-button--normal-font-color: #212529;
+    --sa-arrow-opacity: 0.4;
+    --sa-button--hover-bg-color: #f5c000;
+}
+.btn-secondary {
+    --sa-button--normal-bg-color: #e6e8eb;
+    --sa-button--normal-font-color: #212529;
+    --sa-arrow-opacity: 0.4;
+    --sa-button--hover-bg-color: #d9dbde;
+}
+.btn-secondary:hover {
+    color: #000;
+    background-color: #eaebee;
+    border-color: #e9eaed;
+}
+.btn:hover, .btn-check:focus + .btn{
+    color: var(--sa-button--hover-font-color);
+    background-color: var(--sa-button--hover-bg-color);
+    border-color: var(--sa-button--hover-border-color);
+}
+.btn-check:focus + .btn, .btn:focus {
+    box-shadow: 0 0 0 2px #fff, 0 0 0 4px rgba(0, 0, 0, 0.07);
+}
+.btn {
+    box-shadow: 0 0 0 0 #fff, 0 0 0 0 #3d464d;
+}

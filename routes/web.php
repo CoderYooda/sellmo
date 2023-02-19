@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -13,6 +14,21 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
+Route::get('/admin{any}', function () {
+    return view('admin.index');
+})->where('any', '.*');
+
+Route::group([
+    'prefix'    => '',
+    'middleware' => 'web'
+], function () {
+    Route::post('/register', [Admin\AuthController::class, 'register'])->name('auth.register');
+    Route::post('/login', [Admin\AuthController::class, 'login'])->name('auth.login');
+
+    Route::middleware(['auth:sanctum'])->group(function () {
+
+        Route::post('/logout', [Admin\AuthController::class, 'logout'])->name('auth.logout');
+//        Route::post('/whoami', 'AuthController@whoami')->name('auth.whoami');
+
+    });
 });

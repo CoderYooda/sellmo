@@ -1,0 +1,35 @@
+.form-control {
+    display: block;
+    width: 100%;
+    padding: 0.375rem 0.75rem;
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.5;
+    color: #212529;
+    background-color: #fff;
+    background-clip: padding-box;
+    border: 0.0625rem solid #ced4da;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    border-radius: 0.125rem;
+    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out, background 0.15s ease-in-out;
+}
+.form-control:focus {
+    color: #212529;
+    background-color: #fff;
+    border-color: rgba(19, 38, 77, 0.2);
+    outline: 0;
+    box-shadow: 0 0 0 3px rgb(19 38 77 / 13%);
+}
+label {
+    display: inline-block;
+}
+.form-label {
+    margin-bottom: 0.375rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+}
+.was-validated .form-control:invalid, .form-control.is-invalid {
+    border-color: #db3737;
+}

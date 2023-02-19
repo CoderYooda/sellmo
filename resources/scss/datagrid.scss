@@ -1,0 +1,245 @@
+.data_grid_container{
+    .data_grid_table{
+        overflow-y: hidden;
+        overflow-x: auto;
+        border-right: 1px solid #e7e8ec;
+    }
+    .grid_actions{
+        background: #fff;
+        border-bottom: none;
+        margin-bottom: 10px;
+        display: flex;
+        .search_container{
+            position: relative;
+            .cross{
+                position: absolute;
+                display: block;
+                color: #eee;
+                right: 0;
+                top: 0;
+                height: 27px;
+                padding: 8px 8px;
+                width: 26px;
+                background-image: url(/vendor/bitex/admin/assets/images/sprites.svg);
+                background-position: -33px -4px;
+                opacity: 0.2;
+                &:hover{
+                    opacity: 0.3;
+                }
+            }
+        }
+        .mass_actions{
+            margin-left: auto;
+            display: flex;
+            .count_records{
+                margin-right: 25px;
+            }
+            .btn{
+                padding: 1px 8px;
+                font-size: 14px;
+            }
+        }
+        .search{
+            border: 1px solid #e7e8ec;
+            padding: 1px 10px;
+            font-size: 15px;
+            padding-right: 26px;
+        }
+    }
+    & > *{
+        user-select: none;
+    }
+    .checkbox{
+        width: 30px;
+        //padding: 8px 10px;
+        cursor: pointer;
+        & > input, & .checkmark, .checkbox__container{
+            pointer-events: none;
+            user-select: none;
+            display: block;
+            height: 14px;
+            width: 14px;
+        }
+    }
+    .tab_filters_container{
+        width: 100%;
+        display: flex;
+        .tab_filter_group{
+            margin-left: auto;
+        }
+        .tab_filter_group > .btn{
+            margin-left: 10px;
+        }
+        .btn{
+            padding: 1px 8px;
+            font-size: 14px;
+        }
+    }
+    .table_footer{
+        display: flex;
+        padding: 15px 0;
+    }
+    table {
+        min-width: 100%;
+        border-collapse: separate;
+        border-spacing: 0;
+        //box-shadow: 0 1px 3px rgb(0 0 0 / 15%);
+        text-align: left;
+        .fixed{
+            position: sticky;
+            left: 0;
+            z-index: 12;
+            & + .fixed{
+                left: 32px;
+            }
+        }
+        thead {
+            position: -webkit-sticky;
+            position: sticky;
+            top: 0;
+            z-index: 2;
+            th:not(:last-child){
+                border-right: 1px solid #e7e8ec;
+            }
+            tr th:first-child{
+                border-left: 1px solid #e7e8ec;
+            }
+            th{
+                padding: 3px 10px;
+                border-top: 1px solid #e7e8ec;
+                background: $white;
+                cursor: pointer;
+                position: relative;
+                font-weight: 500;
+                &.checkbox{
+                    padding: 8px;
+                }
+                &.sortable{
+                    padding-right: 32px;
+                }
+                & > *{
+                    white-space: nowrap;
+                }
+            }
+            .arrow.up.active {
+                border-bottom-color: #ffd333;
+            }
+
+            .arrow.up {
+                border-bottom: 6px solid #bbb;
+            }
+            .arrow.down.active {
+                border-top-color: #ffd333;
+            }
+            .arrow.down {
+                border-top: 6px solid #bbb;
+            }
+            .arrow {
+                border-left: 6px solid transparent;
+                border-right: 6px solid transparent;
+                position: absolute;
+                top: 12px;
+                right: 13px;
+            }
+        }
+        tbody{
+            .no_records{
+                background: #fff!important;
+                text-align: center;
+                font-weight: 500;
+                padding: 20px;
+                .no_records__title{
+                    margin-bottom: 15px;
+                    position: relative;
+                }
+                & > div{
+                    margin: auto;
+                    width: fit-content;
+                }
+            }
+            .checkbox__container{
+                margin: 8px 7px;
+                padding: 0!important;
+            }
+            tr{
+                position: relative;
+                &.selected:not(:nth-child(2n)) td {
+                    background: #ffe482!important;
+                    border-color: #ffd333;
+                }
+                &.selected{
+                    td{
+                        background-color: #ffea9d!important;
+                        border-color: #ffd333!important;
+                    }
+                }
+                &.selected + tr td{
+                    border-top: 1px solid #ffd333;
+                }
+
+                //&.selected td::after{
+                //    content: "";
+                //    position: absolute;
+                //    background: rgba(255, 211, 51, 0.21);
+                //    mix-blend-mode: multiply;
+                //    left: -1px;
+                //    top: -1px;
+                //    height: calc(100% + 1px);
+                //    width: calc(100% + 2px);
+                //    z-index: 10;
+                //    -webkit-user-select: none;
+                //    -moz-user-select: none;
+                //    user-select: none;
+                //    pointer-events: none;
+                //}
+                td:first-child{
+                    border-left: 1px solid #e7e8ec;
+                }
+                td:not(.no_records) > * {
+                    //position: absolute;
+                    padding: 3px 10px;
+                    width: 100%;
+                    z-index: 11;
+                    left: 0;
+                    top: 0;
+                    user-select: none;
+                    pointer-events: none;
+                }
+            }
+            tr:not(:nth-child(2n)) td {
+                background: #fafafa;
+            }
+            tr:hover{
+                td{
+                    background: #fffae6;
+                }
+            }
+            tr:last-child{
+                td{
+                    border-bottom: 1px solid #e7e8ec;
+                }
+            }
+            td:not(:last-child){
+                border-right: 1px solid #e7e8ec;
+            }
+            td{
+                height: 30px;
+                border-top: 1px solid #e7e8ec;
+                background: $white;
+                position: relative;
+                cursor: pointer;
+                .checkmark{
+                    //margin: 7px 10px;
+                }
+                & > * {
+                    white-space: nowrap;
+                    max-width: 340px;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                    display: block;
+                    position: absolute;
+                }
+            }
+        }
+    }
+}

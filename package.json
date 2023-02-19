@@ -6,9 +6,29 @@
     },
     "devDependencies": {
         "axios": "^1.1.2",
-        "laravel-vite-plugin": "^0.7.2",
+        "laravel-vite-plugin": "^0.7.4",
         "lodash": "^4.17.19",
         "postcss": "^8.1.14",
-        "vite": "^4.0.0"
-    }
+        "sass": "^1.56.1",
+        "sass-loader": "^12.6.0",
+        "vite": "^4.0.0",
+        "vue": "^3.2.45",
+        "vue-loader": "^16.2.0",
+        "vue-router": "^4.1.6",
+        "vue-template-compiler": "^2.7.14",
+        "vuex": "^4.1.0"
+    },
+    "dependencies": {
+        "@imengyu/vue3-context-menu": "^1.1.5",
+        "@vitejs/plugin-vue": "^4.0.0",
+        "moment": "^2.29.1",
+        "v-click-outside": "^3.2.0",
+        "vee-validate": "^2.2.15",
+        "vue-cal": "^3.10.1",
+        "vue-debounce": "^4.0.0",
+        "vue-kanban": "^1.8.0",
+        "vue-timeago": "^5.1.3",
+        "vuedraggable": "^2.24.3"
+    },
+    "author": "CoderYooda"
 }
