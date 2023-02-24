@@ -18,16 +18,22 @@
         </include>
     </coverage>
     <php>
-<!--        <server name="DB_CONNECTION" value="mysql" force="true"/>-->
+        <server name="APP_APP_TIMEZONE" value="Europe/Moscow" force="true" />
+        <server name="APP_APP_ENV" value="testing" force="true"/>
+        <server name="DB_CONNECTION" value="mysql" force="true"/>
+        <server name="DB_HOST" value="db" force="true"/>
+        <server name="DB_DATABASE" value="sellmo" force="true"/>
+        <server name="DB_USERNAME" value="sellmo" force="true"/>
+        <server name="DB_PASSWORD" value="password" force="true"/>
 <!--        <server name="DB_DATABASE" value="sellmo" force="true"/>-->
-        <env name="APP_ENV" value="testing"/>
-        <env name="BCRYPT_ROUNDS" value="4"/>
-        <env name="CACHE_DRIVER" value="array"/>
-        <server name="DB_HOST" value="mysql"/>
-        <env name="DB_DATABASE" value="sellmo"/>
-        <env name="MAIL_MAILER" value="array"/>
-        <env name="QUEUE_CONNECTION" value="sync"/>
-        <env name="SESSION_DRIVER" value="array"/>
-        <env name="TELESCOPE_ENABLED" value="false"/>
+<!--        <env name="APP_ENV" value="testing"/>-->
+<!--        <env name="BCRYPT_ROUNDS" value="4"/>-->
+<!--        <env name="CACHE_DRIVER" value="array"/>-->
+<!--        <env name="DB_HOST" value="mysql"/>-->
+<!--        <env name="DB_DATABASE" value="sellmo"/>-->
+<!--        <env name="MAIL_MAILER" value="array"/>-->
+<!--        <env name="QUEUE_CONNECTION" value="sync"/>-->
+<!--        <env name="SESSION_DRIVER" value="array"/>-->
+<!--        <env name="TELESCOPE_ENABLED" value="false"/>-->
     </php>
 </phpunit>

@@ -1,48 +1,116 @@
-version: '3'
+version: '3.7'
+
+x-container: &container
+    restart: always
+
+x-php-container: &php-container
+    <<: *container
+    user: 1000:1000
+    env_file:
+        - laravel.env
+    volumes:
+        - ./src:/application
+    networks:
+        - sellmo
+    build:
+        context: .
+        dockerfile: docker/images/php/Dockerfile
+        target: base
+    environment: &php-container-environment
+        APP_ENV: $APP_ENV
+        APP_URL: $APP_URL
+        DB_DATABASE: $DB_DATABASE
+        DB_HOST: $DB_HOST
+        DB_PASSWORD: $DB_PASSWORD
+        DB_PORT: $DB_PORT
+        DB_USERNAME: $DB_USERNAME
+
 services:
     nginx:
         image: nginx:alpine
         ports:
-            - "8000:80"
+            - "80:80"
+            - "443:443"
         volumes:
             - ./docker/nginx:/etc/nginx/conf.d
             - ./src:/application
-            #- ./logs/nginx:/var/log/nginx
+            #- ./logs/nginx:/var/log/
+        profiles:
+            - backend
+        depends_on:
+            php:
+                condition: service_started
         networks:
             - sellmo
         links:
             - php
     php:
-        build: ./docker/images/php/
+        <<: *php-container
+        environment:
+            <<: *php-container-environment
+        profiles:
+            - php-fpm
+            - backend
         links:
-            - mysql
-        volumes:
-            - ./src:/application
+            - db
         networks:
             - sellmo
         depends_on:
-            - mysql
-            - redis
-    mysql:
+            init:
+                condition: service_completed_successfully
+    db:
         image: mysql
+        container_name: db
         ports:
             - "3306:3306"
         environment:
-            MYSQL_ROOT_PASSWORD: 'password'
-            MYSQL_ROOT_HOST: '%'
-            MYSQL_DATABASE: 'sellmo'
-            MYSQL_USER: 'sellmo'
-            MYSQL_PASSWORD: 'password'
+            MYSQL_ROOT_PASSWORD: $DB_PASSWORD
+            MYSQL_DATABASE: $DB_DATABASE
+            MYSQL_USER: $DB_USERNAME
+            MYSQL_PASSWORD: $DB_PASSWORD
             MYSQL_ALLOW_EMPTY_PASSWORD: 1
         #volumes:
+        profiles:
+            - backend
         networks:
             - sellmo
+    init:
+        <<: *php-container
+        restart: "no"
+        profiles:
+            - init
+        environment:
+            <<: *php-container-environment
+        entrypoint: bash
+        command:
+            - -xec
+            - |-
+                composer install --ansi --no-cache
+                php artisan -n --ansi db:ready --timeout=30
+                php artisan -n --ansi migrate --force
+                php artisan -n --ansi cache:clear
+                php artisan -n --ansi view:clear
+                php artisan -n --ansi route:clear
+                php artisan -n --ansi config:clear
+                php artisan -n --ansi clear
+                #test "$APP_ENV" != "production" || php artisan -n --ansi route:cache   # Build route cache (bootstrap/cache/routes-v7.php)
+                #test "$APP_ENV" != "production" || php artisan -n --ansi config:cache  # Build configuration cache from config/* files to bootstrap/cache/config.php
+        expose: []
+        links:
+            - db
+        networks:
+            - sellmo
+        depends_on:
+            db:
+                condition: service_started
     redis:
         image: 'redis:alpine'
         ports:
             - '${FORWARD_REDIS_PORT:-6379}:6379'
         #volumes:
          #   - 'sail-redis:/data'
+        profiles:
+            - backend
         networks:
             - sellmo
         healthcheck:
@@ -52,7 +120,5 @@ networks:
     sellmo:
         driver: bridge
 volumes:
-    sellmo-mysql:
-        driver: local
     sellmo-redis:
         driver: local

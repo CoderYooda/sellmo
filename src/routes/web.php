@@ -14,6 +14,10 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+Route::get('/phpinfo', function () {
+    phpinfo();
+});
+
 Route::get('/admin{any}', function () {
     return view('admin.index');
 })->where('any', '.*');
