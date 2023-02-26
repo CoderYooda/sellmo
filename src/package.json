@@ -2,6 +2,7 @@
     "private": true,
     "scripts": {
         "dev": "vite",
+        "watch": "vite build --watch",
         "build": "vite build"
     },
     "devDependencies": {
@@ -21,7 +22,10 @@
     "dependencies": {
         "@imengyu/vue3-context-menu": "^1.1.5",
         "@vitejs/plugin-vue": "^4.0.0",
+        "build": "^0.1.4",
         "moment": "^2.29.1",
+        "npm": "^9.5.1",
+        "run": "^1.4.0",
         "v-click-outside": "^3.2.0",
         "vee-validate": "^2.2.15",
         "vue-cal": "^3.10.1",

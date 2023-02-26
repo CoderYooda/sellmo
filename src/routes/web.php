@@ -24,7 +24,6 @@ Route::get('/admin{any}', function () {
 
 Route::group([
     'prefix'    => '',
-    'middleware' => 'web'
 ], function () {
     Route::post('/register', [Admin\AuthController::class, 'register'])->name('auth.register');
     Route::post('/login', [Admin\AuthController::class, 'login'])->name('auth.login');

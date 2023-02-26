@@ -8,6 +8,8 @@ x-php-container: &php-container
     user: 1000:1000
     env_file:
         - laravel.env
+    links:
+        - db
     volumes:
         - ./src:/application
     networks:
@@ -34,7 +36,6 @@ services:
         volumes:
             - ./docker/nginx:/etc/nginx/conf.d
             - ./src:/application
-            #- ./logs/nginx:/var/log/
         profiles:
             - backend
         depends_on:
@@ -44,6 +45,16 @@ services:
             - sellmo
         links:
             - php
+    npm:
+        image: node:16.3.0-alpine
+        working_dir: /application
+        environment:
+            - APP_URL=127.0.0.1
+            - NODE_ENV=local
+        volumes:
+            - ./src:/application
+        command: install && run prod
+        entrypoint: npm
     php:
         <<: *php-container
         environment:
@@ -51,10 +62,6 @@ services:
         profiles:
             - php-fpm
             - backend
-        links:
-            - db
-        networks:
-            - sellmo
         depends_on:
             init:
                 condition: service_completed_successfully
@@ -69,7 +76,8 @@ services:
             MYSQL_USER: $DB_USERNAME
             MYSQL_PASSWORD: $DB_PASSWORD
             MYSQL_ALLOW_EMPTY_PASSWORD: 1
-        #volumes:
+        volumes:
+            - sellmo-db:/var/lib/mysql
         profiles:
             - backend
         networks:
@@ -96,19 +104,15 @@ services:
                 #test "$APP_ENV" != "production" || php artisan -n --ansi route:cache   # Build route cache (bootstrap/cache/routes-v7.php)
                 #test "$APP_ENV" != "production" || php artisan -n --ansi config:cache  # Build configuration cache from config/* files to bootstrap/cache/config.php
         expose: []
-        links:
-            - db
-        networks:
-            - sellmo
         depends_on:
             db:
                 condition: service_started
     redis:
-        image: 'redis:alpine'
+        image: redis:5.0-alpine
         ports:
-            - '${FORWARD_REDIS_PORT:-6379}:6379'
-        #volumes:
-         #   - 'sail-redis:/data'
+            - '6379:6379'
+        volumes:
+            - sellmo-redis:/data
         profiles:
             - backend
         networks:
@@ -120,5 +124,7 @@ networks:
     sellmo:
         driver: bridge
 volumes:
+    sellmo-db:
+        driver: local
     sellmo-redis:
         driver: local

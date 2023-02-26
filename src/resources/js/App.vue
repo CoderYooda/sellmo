@@ -1,6 +1,6 @@
 <template lang="">
     <div v-if="isLoading">123</div>
-    <component :is="layout"></component>
+    <component :is="layout">1</component>
 </template>
 
 <script>

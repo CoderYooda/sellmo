@@ -4,11 +4,13 @@ namespace Tests\Feature\Admin;
 
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use App\Models\User;
+use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Tests\TestCase;
 
 class AuthControllerTest extends TestCase
 {
-    use DatabaseTransactions;
+    use DatabaseTransactions, WithoutMiddleware;
+
     public function testSuccessRegister(): void
     {
         $response = $this->withHeaders([
