@@ -1,0 +1,45 @@
+---
+
+version: '3.7'
+
+x-container: &container
+    restart: always
+
+services:
+    nginx:
+        <<: *container
+        image: ${COMPOSE_PROJECT_NAME:-localhost}/nginx:latest
+        build:
+            context: .
+            dockerfile: docker/images/nginx/Dockerfile
+            target: nginx-base
+        volumes:
+            - ./docker/nginx/certs:/etc/nginx/certs
+            - ./src/public:/application/public
+        depends_on:
+            php:
+                condition: service_started
+    front-admin:
+        <<: *container
+        image: ${COMPOSE_PROJECT_NAME:-localhost}/front-admin:latest
+        user: $DEV_LOCAL_UID:$DEV_LOCAL_GID
+        restart: "no"
+        profiles:
+            - front-admin
+            - backend-admin
+        environment:
+            HOME: /tmp/HOME
+            NPM_COMMAND: build
+        build:
+            context: .
+            dockerfile: docker/images/nginx/Dockerfile
+            target: node-base
+        entrypoint: sh
+        command:
+            - -xec
+            - |-
+                npm install
+                npm run build
+        volumes:
+            - ./src:/application
+            - ./volumes/front-admin/HOME:/tmp/HOME
