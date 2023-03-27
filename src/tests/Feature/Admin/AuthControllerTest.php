@@ -22,8 +22,10 @@ class AuthControllerTest extends TestCase
             'password_confirmation' => '315405'
         ]);
 
+        $user = User::where('email', 'TestEmail@email.com')->first();
+
         $response->assertStatus(200);
-        $this->assertAuthenticated($guard = null);
+        $this->assertAuthenticatedAs($user);
         $this->assertDatabaseHas('users', [
             'email' => 'TestEmail@email.com',
         ]);
@@ -71,43 +73,43 @@ class AuthControllerTest extends TestCase
         $this->assertGuest('web');
     }
 
-    public function testInvalidParamsRegister(): void
+    /**
+     * @return string[][]
+     */
+    public function invalidRegisterDataProvider(): array
     {
-        $response = $this->withHeaders([
-            'Accept' => 'application/json'
-        ])->post('/register', [
-            'name' => 'Sally',
-            'email' => 'VeryLongEmailVeryLongEmailVeryLongEmailVeryLongEmail@email.com',
-            'password' => '315405',
-            'password_confirmation' => '315405'
-        ]);
-
-        $response->assertStatus(422);
+        return [
+            ['Sally', 'TestEmailTestEmailTestEmailTestEmailTest@email.com', '313131', '313131'],
+            ['Sally', 'TestEmail@email.com', '313131', ''],
+            ['Sally', 'TestEmail@email.com', '', '313131'],
+            ['', 'TestEmail@email.com', '313131', '313131'],
+            ['Sally', 'email.com', '313131', '313131'],
+            ['Sally', 'TestEmail@email.com', '123456789012345', '123456789012345'],
+            ['SellmoSellmoSellmoSellmoSellmoSellmoS', 'TestEmail@email.com', '313131', '313131'],
+        ];
     }
 
-    public function testInvalidParamsRegister1(): void
-    {
+    /**
+     * @param string|null $userName
+     * @param string|null $email
+     * @param string|null $password
+     * @param string|null $confirmation
+     * @return void
+     * @dataProvider invalidRegisterDataProvider
+     */
+    public function testInvalidParamsRegister(
+        ?string $userName,
+        ?string $email,
+        ?string $password,
+        ?string $confirmation
+    ): void {
         $response = $this->withHeaders([
             'Accept' => 'application/json'
         ])->post('/register', [
-            'name' => '',
-            'email' => 'VeryLongEmail@email.com',
-            'password' => '315405',
-            'password_confirmation' => '315405'
-        ]);
-
-        $response->assertStatus(422);
-    }
-
-    public function testInvalidParamsRegister2(): void
-    {
-        $response = $this->withHeaders([
-            'Accept' => 'application/json'
-        ])->post('/register', [
-            'name' => 'Sally',
-            'email' => 'VeryLongEmail@email.com',
-            'password' => '315405',
-            'password_confirmation' => ''
+            'name' => $userName,
+            'email' => $email,
+            'password' => $password,
+            'password_confirmation' => $confirmation
         ]);
 
         $response->assertStatus(422);

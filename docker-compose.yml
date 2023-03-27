@@ -30,12 +30,24 @@ x-php-container: &php-container
 services:
     nginx:
         image: nginx:alpine
-        ports:
-            - "80:80"
-            - "443:443"
         volumes:
+            - ./docker/nginx/certs:/etc/nginx/certs
             - ./docker/nginx:/etc/nginx/conf.d
             - ./src:/application
+        expose:
+            - 80
+            - 443
+        labels:
+            - traefik.enable=true
+            - traefik.http.routers.${COMPOSE_PROJECT_NAME:-sellmo}-nginx.tls=true
+            - traefik.http.routers.${COMPOSE_PROJECT_NAME:-sellmo}-nginx.tls.certresolver=cloudflare-acme
+            - traefik.http.routers.${COMPOSE_PROJECT_NAME:-sellmo}-nginx.rule=Host(`$VIRTUAL_HOST`) && PathPrefix(`/`)
+            - traefik.http.routers.${COMPOSE_PROJECT_NAME:-sellmo}-nginx.entrypoints=https
+            - traefik.http.services.${COMPOSE_PROJECT_NAME:-sellmo}-nginx.loadbalancer.server.port=443
+            - traefik.http.services.${COMPOSE_PROJECT_NAME:-sellmo}-nginx.loadbalancer.server.scheme=https
+            - traefik.http.routers.${COMPOSE_PROJECT_NAME:-sellmo}-nginx-http.rule=Host(`$VIRTUAL_HOST`) && PathPrefix(`/`)
+            - traefik.http.routers.${COMPOSE_PROJECT_NAME:-sellmo}-nginx-http.entrypoints=http
+            - traefik.http.routers.${COMPOSE_PROJECT_NAME:-sellmo}-nginx-http.middlewares=default-https-redirect@file
         profiles:
             - backend
         depends_on:
@@ -45,16 +57,6 @@ services:
             - sellmo
         links:
             - php
-    npm:
-        image: node:16.3.0-alpine
-        working_dir: /application
-        environment:
-            - APP_URL=127.0.0.1
-            - NODE_ENV=local
-        volumes:
-            - ./src:/application
-        command: install && run prod
-        entrypoint: npm
     php:
         <<: *php-container
         environment:
@@ -65,6 +67,7 @@ services:
         depends_on:
             init:
                 condition: service_completed_successfully
+
     db:
         image: mysql
         container_name: db
@@ -124,6 +127,7 @@ networks:
     sellmo:
         driver: bridge
 volumes:
+    certs:
     sellmo-db:
         driver: local
     sellmo-redis:
