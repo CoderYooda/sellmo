@@ -2,11 +2,13 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
 
 /**
  * @property int $id
+ * @property int $phone
  **/
 class Phone extends AbstractModel
 {
@@ -22,6 +24,17 @@ class Phone extends AbstractModel
         self::HOME_PHONE,
         self::WORK_PHONE,
     ];
+
+    /**
+     * @return Attribute
+     */
+    public function phone(): Attribute
+    {
+        return Attribute::make(
+            get: fn (int $value) => $value,
+            set: fn ($value) => (int) phoneToFormat($value),
+        );
+    }
 
     /**
      * @return MorphToMany
