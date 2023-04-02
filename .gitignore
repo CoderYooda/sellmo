@@ -1,1 +1,6 @@
+.idea/
+.code/
 .env
+*.env
+.editorconfig
+docker-compose.override.yml
