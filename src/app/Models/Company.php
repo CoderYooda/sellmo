@@ -2,8 +2,11 @@
 
 namespace App\Models;
 
+use App\Models\Pivot\CompanyPerson;
+use App\Traits\HasAddresses;
+use App\Traits\HasEmails;
+use App\Traits\HasPhones;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 /**
@@ -11,7 +14,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
  **/
 class Company extends AbstractModel
 {
-    use HasFactory;
+    use HasFactory, HasPhones, HasEmails, HasAddresses;
 
     public function persons(): BelongsToMany
     {

@@ -1,12 +1,10 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\Pivot;
 
+use App\Models\Person;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\Pivot;
 
 class CompanyPerson extends Pivot
