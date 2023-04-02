@@ -86,6 +86,7 @@ class AuthControllerTest extends TestCase
             ['Sally', 'email.com', '313131', '313131'],
             ['Sally', 'TestEmail@email.com', '123456789012345', '123456789012345'],
             ['SellmoSellmoSellmoSellmoSellmoSellmoS', 'TestEmail@email.com', '313131', '313131'],
+            ['Sellmo', '', '313131', '313131'],
         ];
     }
 
