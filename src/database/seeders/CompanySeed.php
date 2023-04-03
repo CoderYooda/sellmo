@@ -6,8 +6,13 @@ use App\Models\Address;
 use App\Models\Appointment;
 use App\Models\Company;
 use App\Models\Email;
+use App\Models\Lead\Lead;
+use App\Models\Lead\LeadSource;
+use App\Models\Lead\LeadType;
 use App\Models\Person;
 use App\Models\Phone;
+use App\Models\TaskTracker\Pipeline;
+use App\Models\TaskTracker\PipelineStage;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Collection;
@@ -21,16 +26,46 @@ class CompanySeed extends Seeder
      */
     public function run(): void
     {
-        Company::factory(1)->create([
+        Company::factory(10)->create([
             'name' => 'Тестовая компания',
         ])->each(function ($company){
             $company->phones()->sync($this->createPhones(2));
             $company->emails()->sync($this->createEmails(rand(1,4)));
             $company->addresses()->sync($this->createAddresses(rand(1,4)));
 
-            $this->createPersonForCompany($company, 1, Appointment::DIRECTOR);
-            $this->createPersonForCompany($company, 2, Appointment::MANAGER);
-            $this->createPersonForCompany($company, 3, Appointment::EMPLOYEE);
+            $persons = collect();
+            $persons->push($this->createPersonForCompany($company, 1, Appointment::DIRECTOR));
+            $persons->push($this->createPersonForCompany($company, 2, Appointment::MANAGER));
+            $persons->push($this->createPersonForCompany($company, 3, Appointment::EMPLOYEE));
+
+            $leadTypes = $this->createLeadTypes($company, 2);
+            $leadSources = $this->createLeadSources($company, 3);
+
+            $this->createPipelines($company, 4)->each(function ($pipeline) use (
+                $company,
+                $persons,
+                $leadTypes,
+                $leadSources,
+            ){
+                $stagesDataProvider = [
+                    ['Новый',0],
+                    ['Был звонок',1],
+                    ['КП отправлено',2],
+                    ['Провал',3],
+                ];
+                foreach ($stagesDataProvider as $data){
+                    $stage = $this->createPipelineStage($company, $pipeline, ...$data);
+                    $this->createLeads(
+                        $company,
+                        $pipeline,
+                        $stage,
+                        $persons->random()->first(),
+                        $leadSources,
+                        $leadTypes,
+                        10
+                    );
+                }
+            });
         });
     }
 
@@ -38,16 +73,16 @@ class CompanySeed extends Seeder
      * @param Company $company
      * @param int $count
      * @param string $appointmentName
-     * @return void
+     * @return Collection
      */
-    protected function createPersonForCompany(Company $company, int $count, string $appointmentName): void
+    protected function createPersonForCompany(Company $company, int $count, string $appointmentName): Collection
     {
         $appointment = Appointment::firstOrCreate([
             'name' => $appointmentName,
             'company_id' => $company->id,
         ]);
 
-        Person::factory($count)->create([
+        return Person::factory($count)->create([
             'company_id' => $company->id,
         ])->each(function($person) use ($appointment, $company){
 
@@ -95,5 +130,92 @@ class CompanySeed extends Seeder
     protected function createAddresses(int $count = 1): Collection
     {
         return Address::factory($count)->create()->pluck('id');
+    }
+
+    /**
+     * @param Company $company
+     * @param int $count
+     * @return Collection
+     */
+    protected function createLeadTypes(Company $company, int $count = 1): Collection
+    {
+        return LeadType::factory($count)->create([
+            'company_id' => $company->id
+        ]);
+    }
+
+    /**
+     * @param Company $company
+     * @param int $count
+     * @return Collection
+     */
+    protected function createLeadSources(Company $company, int $count = 1): Collection
+    {
+        return LeadSource::factory($count)->create([
+            'company_id' => $company->id
+        ]);
+    }
+
+    /**
+     * @param Company $company
+     * @param int $count
+     * @return Collection
+     */
+    protected function createPipelines(Company $company, int $count = 1): Collection
+    {
+        return Pipeline::factory($count)->create([
+            'company_id' => $company->id
+        ]);
+    }
+
+    /**
+     * @param Company $company
+     * @param Pipeline $pipeline
+     * @param string $name
+     * @param ?string $slug
+     * @param int $order
+     * @return PipelineStage
+     */
+    protected function createPipelineStage(
+        Company $company,
+        Pipeline $pipeline,
+        string $name,
+        int $order,
+        ?string $slug = null,
+    ): PipelineStage {
+        return PipelineStage::factory()->create([
+            'name' => $name,
+            'slug' => $slug ?? translit($name),
+            'order' => $order,
+            'company_id' => $company->id,
+            'pipeline_id' => $pipeline->id,
+        ]);
+    }
+
+    /**
+     * @param Company $company
+     * @param Pipeline $pipeline
+     * @param PipelineStage $pipelineStage
+     * @param Collection $leadSources
+     * @param Collection $leadTypes
+     * @return Collection
+     */
+    protected function createLeads(
+        Company $company,
+        Pipeline $pipeline,
+        PipelineStage $pipelineStage,
+        Person $creator,
+        Collection $leadSources,
+        Collection $leadTypes,
+        int $count = 1
+    ): Collection {
+        return Lead::factory($count)->create([
+            'company_id' => $company->id,
+            'pipeline_id' => $pipeline->id,
+            'pipeline_stage_id' => $pipelineStage->id,
+            'lead_type_id' => $leadTypes->random()->first()->id,
+            'lead_source_id' => $leadSources->random()->first()->id,
+            'creator_id' => $creator->id,
+        ])->pluck('id');
     }
 }
