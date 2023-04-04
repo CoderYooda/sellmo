@@ -216,6 +216,6 @@ class CompanySeed extends Seeder
             'lead_type_id' => $leadTypes->random()->first()->id,
             'lead_source_id' => $leadSources->random()->first()->id,
             'creator_id' => $creator->id,
-        ])->pluck('id');
+        ]);
     }
 }
