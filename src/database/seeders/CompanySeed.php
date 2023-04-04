@@ -196,8 +196,10 @@ class CompanySeed extends Seeder
      * @param Company $company
      * @param Pipeline $pipeline
      * @param PipelineStage $pipelineStage
+     * @param Person $creator
      * @param Collection $leadSources
      * @param Collection $leadTypes
+     * @param int $count
      * @return Collection
      */
     protected function createLeads(
