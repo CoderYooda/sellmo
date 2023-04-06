@@ -8,6 +8,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
+ * Должность
+ *
  * @property int $id
  * @property string $name
  **/
@@ -18,10 +20,12 @@ class Appointment extends AbstractModel
     public const DIRECTOR = 'director';
     public const MANAGER = 'manager';
     public const EMPLOYEE = 'employee';
+    public const CLIENT = 'client';
 
     public const BASE_APPOINTMENTS = [
         self::DIRECTOR,
         self::MANAGER,
         self::EMPLOYEE,
+        self::CLIENT,
     ];
 }

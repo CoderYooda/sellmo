@@ -13,29 +13,15 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('persons', function (Blueprint $table) {
+        Schema::create('organizations', function (Blueprint $table) {
             $table->id();
-            $table->string('first_name');
-            $table->string('last_name');
-            $table->string('middle_name')->nullable();
-            $table->unsignedBigInteger('user_id')->nullable();
+            $table->string('name');
             $table->unsignedBigInteger('company_id');
-            $table->unsignedBigInteger('organization_id')->nullable();
             $table->timestamps();
-
-            $table->foreign('user_id')
-                ->references('id')
-                ->on('users')
-                ->onDelete('no action');
 
             $table->foreign('company_id')
                 ->references('id')
                 ->on('companies')
-                ->onDelete('no action');
-
-            $table->foreign('organization_id')
-                ->references('id')
-                ->on('organizations')
                 ->onDelete('no action');
         });
     }
@@ -47,6 +33,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('persons');
+        Schema::dropIfExists('organizations');
     }
 };

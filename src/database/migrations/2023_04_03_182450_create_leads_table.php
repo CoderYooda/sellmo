@@ -24,6 +24,7 @@ return new class extends Migration
             $table->dateTime('closed_at');
             $table->unsignedBigInteger('lead_source_id');
             $table->unsignedBigInteger('creator_id');
+            $table->unsignedBigInteger('person_id');
             $table->unsignedBigInteger('lead_type_id');
             $table->unsignedBigInteger('pipeline_id');
             $table->unsignedBigInteger('pipeline_stage_id');
@@ -31,6 +32,11 @@ return new class extends Migration
             $table->timestamps();
 
             $table->foreign('creator_id')
+                ->references('id')
+                ->on('persons')
+                ->onDelete('no action');
+
+            $table->foreign('person_id')
                 ->references('id')
                 ->on('persons')
                 ->onDelete('no action');

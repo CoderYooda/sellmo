@@ -9,6 +9,7 @@ use App\Models\Email;
 use App\Models\Lead\Lead;
 use App\Models\Lead\LeadSource;
 use App\Models\Lead\LeadType;
+use App\Models\Organization;
 use App\Models\Person;
 use App\Models\Phone;
 use App\Models\TaskTracker\Pipeline;
@@ -26,7 +27,7 @@ class CompanySeed extends Seeder
      */
     public function run(): void
     {
-        Company::factory(10)->create([
+        Company::factory(1)->create([
             'name' => 'Тестовая компания',
         ])->each(function ($company){
             $company->phones()->sync($this->createPhones(2));
@@ -37,6 +38,7 @@ class CompanySeed extends Seeder
             $persons->push($this->createPersonForCompany($company, 1, Appointment::DIRECTOR));
             $persons->push($this->createPersonForCompany($company, 2, Appointment::MANAGER));
             $persons->push($this->createPersonForCompany($company, 3, Appointment::EMPLOYEE));
+            $persons->push($this->createPersonForCompany($company, 4, Appointment::CLIENT));
 
             $leadTypes = $this->createLeadTypes($company, 2);
             $leadSources = $this->createLeadSources($company, 3);
@@ -59,6 +61,7 @@ class CompanySeed extends Seeder
                         $company,
                         $pipeline,
                         $stage,
+                        $persons->random()->first(),
                         $persons->random()->first(),
                         $leadSources,
                         $leadTypes,
@@ -89,6 +92,8 @@ class CompanySeed extends Seeder
             $person->phones()->sync($this->createPhones(rand(1,4)));
             $person->emails()->sync($this->createEmails(rand(1,4)));
             $person->addresses()->sync($this->createAddresses(rand(1,4)));
+            $person->organization()->associate($this->createOrganization($company));
+            $person->save();
 
             if(in_array($appointment->name, [Appointment::DIRECTOR, Appointment::MANAGER])){
                 $user = User::factory()->create();
@@ -130,6 +135,16 @@ class CompanySeed extends Seeder
     protected function createAddresses(int $count = 1): Collection
     {
         return Address::factory($count)->create()->pluck('id');
+    }
+
+    /**
+     * @return Organization
+     */
+    protected function createOrganization(Company $company): Organization
+    {
+        return Organization::factory()->create([
+            'company_id' => $company->id,
+        ]);
     }
 
     /**
@@ -207,6 +222,7 @@ class CompanySeed extends Seeder
         Pipeline $pipeline,
         PipelineStage $pipelineStage,
         Person $creator,
+        Person $person,
         Collection $leadSources,
         Collection $leadTypes,
         int $count = 1
@@ -218,6 +234,7 @@ class CompanySeed extends Seeder
             'lead_type_id' => $leadTypes->random()->first()->id,
             'lead_source_id' => $leadSources->random()->first()->id,
             'creator_id' => $creator->id,
+            'person_id' => $person->id,
         ]);
     }
 }
