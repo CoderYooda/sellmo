@@ -31,7 +31,7 @@ Route::group([
     Route::middleware(['auth:sanctum'])->group(function () {
 
         Route::post('/logout', [Admin\AuthController::class, 'logout'])->name('auth.logout');
-//        Route::post('/whoami', 'AuthController@whoami')->name('auth.whoami');
+        Route::post('/whoami', [Admin\AuthController::class, 'whoami'])->name('auth.whoami');
 
     });
 });

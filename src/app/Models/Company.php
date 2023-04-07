@@ -16,9 +16,20 @@ class Company extends AbstractModel
 {
     use HasFactory, HasPhones, HasEmails, HasAddresses;
 
+    /**
+     * @return BelongsToMany
+     */
     public function persons(): BelongsToMany
     {
         return $this->belongsToMany(Person::class)
             ->using(CompanyPerson::class);
+    }
+
+    /**
+     * @return BelongsToMany
+     */
+    public function categories(): BelongsToMany
+    {
+        return $this->belongsToMany(Category::class);
     }
 }

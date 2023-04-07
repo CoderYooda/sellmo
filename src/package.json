@@ -2,7 +2,7 @@
     "private": true,
     "scripts": {
         "dev": "vite",
-        "watch": "vite build --watch",
+        "watch": "cross-env NODE_ENV=development vite build --watch",
         "build": "vite build"
     },
     "devDependencies": {
@@ -24,6 +24,7 @@
         "@vitejs/plugin-vue": "^4.0.0",
         "build": "^0.1.4",
         "moment": "^2.29.1",
+        "cross-env": "7.0.3",
         "npm": "^9.5.1",
         "run": "^1.4.0",
         "v-click-outside": "^3.2.0",

@@ -21,7 +21,6 @@ RUN pecl install -o -f redis \
 &&  rm -rf /tmp/pear \
 &&  docker-php-ext-enable redis
 
-
 ADD /docker/images/php/php.ini /usr/local/etc/php/conf.d/sellmo-php.ini
 
 #RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer

@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use App\Models\Address;
 use App\Models\Appointment;
+use App\Models\Category;
 use App\Models\Company;
 use App\Models\Email;
 use App\Models\Lead\Lead;
@@ -15,11 +16,19 @@ use App\Models\Phone;
 use App\Models\TaskTracker\Pipeline;
 use App\Models\TaskTracker\PipelineStage;
 use App\Models\User;
+use App\Repositories\Category\CategoryRepository;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Collection;
 
 class CompanySeed extends Seeder
 {
+    protected CategoryRepository $categoryRepository;
+
+    public function __construct(CategoryRepository $categoryRepository)
+    {
+        $this->categoryRepository = $categoryRepository;
+    }
+
     /**
      * Run the database seeds.
      *
@@ -33,6 +42,13 @@ class CompanySeed extends Seeder
             $company->phones()->sync($this->createPhones(2));
             $company->emails()->sync($this->createEmails(rand(1,4)));
             $company->addresses()->sync($this->createAddresses(rand(1,4)));
+
+            $rootProductsCategory = $this->categoryRepository->getRootCategoryBySlug(Category::SLUG_PRODUCTS);
+
+            $rootProductsCategory->children()->create([
+                'name' => 'Мои товары',
+                'company_id' => $company->id,
+            ]);
 
             $persons = collect();
             $persons->push($this->createPersonForCompany($company, 1, Appointment::DIRECTOR));

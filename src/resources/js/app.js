@@ -18,7 +18,6 @@ let app = createApp(App)
     .use(store)
     .use(router);
 
-
 window.axios.interceptors.response.use(  (response) => {
 
     // if(response.data.hasOwnProperty('redirect')){

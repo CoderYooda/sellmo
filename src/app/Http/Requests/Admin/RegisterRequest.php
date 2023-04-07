@@ -20,7 +20,6 @@ class RegisterRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => ['required', 'string', 'max:14'],
             'email' => ['required', 'email', 'unique:users', 'max:28'],
             'password' => ['required', 'confirmed', 'max:14']
         ];
@@ -31,7 +30,7 @@ class RegisterRequest extends FormRequest
      */
     public function getName(): string
     {
-        return $this->validated()['name'];
+        return $this->validated()['name'] ?? stristr($this->getEmail(), '@', true);
     }
 
     /**

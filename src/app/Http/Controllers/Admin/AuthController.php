@@ -68,6 +68,7 @@ class AuthController extends Controller
     }
 
     /**
+     * @param Request $request
      * @return JsonResponse
      */
     public function logout(Request $request): JsonResponse
@@ -83,6 +84,17 @@ class AuthController extends Controller
 
         return response()->json([
             'status' => 'OK',
+        ]);
+    }
+
+    /**
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function whoami(Request $request): JsonResponse
+    {
+        return response()->json([
+            'user' => $request->user(),
         ]);
     }
 }
