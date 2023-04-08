@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('last_name');
             $table->string('middle_name')->nullable();
             $table->unsignedBigInteger('user_id')->nullable();
-            $table->unsignedBigInteger('company_id');
+            $table->unsignedBigInteger('company_id')->nullable();
             $table->unsignedBigInteger('organization_id')->nullable();
             $table->timestamps();
 

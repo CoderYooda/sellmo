@@ -60,4 +60,12 @@ class User extends Authenticatable
     {
         return $this->hasOne(Person::class);
     }
+
+    /**
+     * @return ?Company
+     */
+    public function getCompany(): ?Company
+    {
+        return $this->person?->getCompany();
+    }
 }

@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\LoginRequest;
 use App\Http\Requests\Admin\RegisterRequest;
 use App\Http\Resources\Auth\UserResource;
+use App\Models\Person;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -58,6 +59,11 @@ class AuthController extends Controller
         $user->password = bcrypt($request->getPassword());
 
         $user->save();
+
+        $user->person()->create([
+            'first_name' => 'Без имени',
+            'last_name' => 'Без фамилии',
+        ]);
 
         Auth::login($user);
 

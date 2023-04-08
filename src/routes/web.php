@@ -35,3 +35,10 @@ Route::group([
 
     });
 });
+
+Route::group([
+    'prefix'    => 'categories',
+    'middleware' => ['company']
+], function () {
+    Route::post('/', [Admin\CategoryController::class, 'categoriesTree'])->name('admin.categories');
+});

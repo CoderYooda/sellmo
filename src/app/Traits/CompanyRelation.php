@@ -16,9 +16,9 @@ trait CompanyRelation
     }
 
     /**
-     * @return Company
+     * @return ?Company
      */
-    public function getCompany(): Company
+    public function getCompany(): ?Company
     {
         /** @var Company $company */
         $company = $this->company()->first();
