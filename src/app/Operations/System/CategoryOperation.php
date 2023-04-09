@@ -113,7 +113,6 @@ class CategoryOperation
         $category = $this->categoryRepository->find($categoryId);
 
         if($recursive){
-            $category->descendants()->delete();
             $category->delete();
             $this->logger->debug('[CATEGORY] deleted recursive', [
                 'categoryId' => $categoryId,
