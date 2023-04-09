@@ -36,6 +36,8 @@ class User extends Authenticatable
         'remember_token',
     ];
 
+//    protected $with = ['person'];
+
     /**
      * The attributes that should be cast.
      *
@@ -66,6 +68,6 @@ class User extends Authenticatable
      */
     public function getCompany(): ?Company
     {
-        return $this->person?->getCompany();
+        return $this->person()->first()?->getCompany();
     }
 }

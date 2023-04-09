@@ -16,7 +16,7 @@ class DatabaseSeeder extends Seeder
     {
         $this->call([
             CategorySeed::class,
-            CompanySeed::class,
+//            CompanySeed::class,
         ]);
 
          \App\Models\User::factory()->create([

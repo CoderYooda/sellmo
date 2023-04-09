@@ -14,4 +14,10 @@ use Illuminate\Database\Eloquent\Builder;
 class Role extends \Spatie\Permission\Models\Role
 {
     public const ROLE_ADMIN = 'admin';
+    public const CRM_USER = 'crm_user';
+
+    public const SYSTEM_ROLES = [
+        self::ROLE_ADMIN,
+        self::CRM_USER,
+    ];
 }

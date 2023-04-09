@@ -2,20 +2,19 @@
 
 namespace App\Models;
 
+use App\Traits\CompanyRelation;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
  * Должность
  *
  * @property int $id
  * @property string $name
+ * @property int $company_id
  **/
 class Appointment extends AbstractModel
 {
-    use HasFactory;
+    use HasFactory, CompanyRelation;
 
     public const DIRECTOR = 'director';
     public const MANAGER = 'manager';

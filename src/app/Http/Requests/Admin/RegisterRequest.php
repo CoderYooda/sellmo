@@ -21,7 +21,11 @@ class RegisterRequest extends FormRequest
     {
         return [
             'email' => ['required', 'email', 'unique:users', 'max:28'],
-            'password' => ['required', 'confirmed', 'max:14']
+            'password' => ['required', 'confirmed', 'max:14'],
+            'first_name' => ['required', 'max:20'],
+            'last_name' => ['required', 'max:20'],
+            'middle_name' => ['required', 'max:20'],
+            'company_name' => ['required', 'max:28'],
         ];
     }
 
@@ -39,6 +43,38 @@ class RegisterRequest extends FormRequest
     public function getEmail(): string
     {
         return $this->validated()['email'];
+    }
+
+    /**
+     * @return string
+     */
+    public function getFirstName(): string
+    {
+        return $this->validated()['first_name'];
+    }
+
+    /**
+     * @return string
+     */
+    public function getLastName(): string
+    {
+        return $this->validated()['last_name'];
+    }
+
+    /**
+     * @return string
+     */
+    public function getMiddleName(): string
+    {
+        return $this->validated()['middle_name'];
+    }
+
+    /**
+     * @return string
+     */
+    public function getCompanyName(): string
+    {
+        return $this->validated()['company_name'];
     }
 
     /**

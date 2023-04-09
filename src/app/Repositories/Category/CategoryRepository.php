@@ -35,11 +35,25 @@ class CategoryRepository
     public function getCategoriesTree(bool|int $rootCategoryId = false, int $companyId = null, bool $force = false): Collection
     {
         return Category::query()
+            ->where('type', Category::TYPE_SYSTEM)
             ->when(!$force, function ($q) use ($companyId){
-                $q->where('company_id', $companyId)
-                    ->orWhere('type', Category::TYPE_SYSTEM);
+                $q->orWhere('company_id', $companyId);
             })
             ->get()
             ->toTree($rootCategoryId);
+    }
+
+    /**
+     * @param int $id
+     * @return Category|null
+     */
+    public function find(int $id): ?Category
+    {
+        /** @var Category $category */
+        $category = Category::query()
+            ->where('id', $id)
+            ->first();
+
+        return $category;
     }
 }

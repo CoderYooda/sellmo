@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Category;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -27,6 +28,24 @@ return new class extends Migration
                 ->on('companies')
                 ->onDelete('no action');
         });
+
+        Category::create([
+            'name' => 'Главная',
+            'type' => Category::TYPE_SYSTEM,
+            'slug' => 'root',
+            'children' => [
+                [
+                    'name' => 'Товары',
+                    'type' => Category::TYPE_SYSTEM,
+                    'slug' => 'products',
+                ],
+                [
+                    'name' => 'Услуги',
+                    'type' => Category::TYPE_SYSTEM,
+                    'slug' => 'service',
+                ],
+            ],
+        ]);
     }
 
     /**

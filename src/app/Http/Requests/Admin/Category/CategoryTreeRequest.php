@@ -2,13 +2,12 @@
 
 namespace App\Http\Requests\Admin\Category;
 
+use App\Models\Permission;
 use Illuminate\Foundation\Http\FormRequest;
 
 class CategoryTreeRequest extends FormRequest
 {
     /**
-     * Determine if the user is authorized to make this request.
-     *
      * @return bool
      */
     public function authorize(): bool
@@ -25,7 +24,7 @@ class CategoryTreeRequest extends FormRequest
     {
         return [
             'root_category_id' => ['required'],
-            'company_id' => ['required', 'exists:companies,id'],
+            'company_id' => ['required_if:force,false'],
             'force' => ['bool'],
         ];
     }
@@ -62,5 +61,13 @@ class CategoryTreeRequest extends FormRequest
         return [
             'company_id' => "Нет доступа к компании"
         ];
+    }
+
+    /**
+     * @return bool
+     */
+    public function canAccessIfForce(): bool
+    {
+        return $this->isForce() ? $this->user()->can(Permission::CAN_VIEW_CATEGORY_TREE_FORCE) : true;
     }
 }

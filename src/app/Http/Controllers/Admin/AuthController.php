@@ -8,6 +8,7 @@ use App\Http\Requests\Admin\RegisterRequest;
 use App\Http\Resources\Auth\UserResource;
 use App\Models\Person;
 use App\Models\User;
+use App\Operations\Company\CompanyOperation;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -15,6 +16,13 @@ use Illuminate\Support\Facades\Log;
 
 class AuthController extends Controller
 {
+    protected CompanyOperation $companyOperation;
+
+    public function __construct(CompanyOperation $companyOperation)
+    {
+        $this->companyOperation = $companyOperation;
+    }
+
     /**
      * @param LoginRequest $request
      * @return JsonResponse
@@ -52,18 +60,15 @@ class AuthController extends Controller
      */
     public function register(RegisterRequest $request): JsonResponse
     {
-        $user = new User();
-
-        $user->name = $request->getName();
-        $user->email = $request->getEmail();
-        $user->password = bcrypt($request->getPassword());
-
-        $user->save();
-
-        $user->person()->create([
-            'first_name' => 'Без имени',
-            'last_name' => 'Без фамилии',
-        ]);
+        $user = $this->companyOperation->create(
+            $request->getCompanyName(),
+            $request->getFirstName(),
+            $request->getLastName(),
+            $request->getMiddleName(),
+            $request->getName(),
+            $request->getEmail(),
+            $request->getPassword(),
+        );
 
         Auth::login($user);
 

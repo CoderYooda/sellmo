@@ -51,6 +51,10 @@ class CreatePermissionTables extends Migration
             }
         });
 
+        foreach (\App\Models\Role::SYSTEM_ROLES as $role){
+            \App\Models\Role::create(['name' => $role]);
+        }
+
         Schema::create($tableNames['model_has_permissions'], function (Blueprint $table) use ($tableNames, $columnNames, $teams) {
             $table->unsignedBigInteger(PermissionRegistrar::$pivotPermission);
 

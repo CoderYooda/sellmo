@@ -16,6 +16,7 @@ return new class extends Migration
         Schema::create('appointments', function (Blueprint $table) {
             $table->id();
             $table->string('name');
+            $table->boolean('locked')->default(false);
             $table->unsignedBigInteger('company_id');
             $table->timestamps();
 

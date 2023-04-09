@@ -2,27 +2,27 @@
 
 namespace App\Models;
 
-use App\Models\Pivot\CompanyPerson;
 use App\Traits\HasAddresses;
 use App\Traits\HasEmails;
 use App\Traits\HasPhones;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 /**
  * @property int $id
+ * @property string $name
  **/
 class Company extends AbstractModel
 {
     use HasFactory, HasPhones, HasEmails, HasAddresses;
 
     /**
-     * @return BelongsToMany
+     * @return BelongsTo
      */
-    public function persons(): BelongsToMany
+    public function persons(): BelongsTo
     {
-        return $this->belongsToMany(Person::class)
-            ->using(CompanyPerson::class);
+        return $this->belongsTo(Person::class);
     }
 
     /**

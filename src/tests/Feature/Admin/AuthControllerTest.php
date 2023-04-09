@@ -19,7 +19,11 @@ class AuthControllerTest extends TestCase
             'name' => 'Sally',
             'email' => 'TestEmail@email.com',
             'password' => '315405',
-            'password_confirmation' => '315405'
+            'password_confirmation' => '315405',
+            'first_name' => 'Тестер',
+            'last_name' => 'Тестеров',
+            'middle_name' => 'Тестерович',
+            'company_name' => 'Тестовая компания',
         ]);
 
         $user = User::where('email', 'TestEmail@email.com')->first();
@@ -79,14 +83,15 @@ class AuthControllerTest extends TestCase
     public function invalidRegisterDataProvider(): array
     {
         return [
-            ['Sally', 'TestEmailTestEmailTestEmailTestEmailTest@email.com', '313131', '313131'],
-            ['Sally', 'TestEmail@email.com', '313131', ''],
-            ['Sally', 'TestEmail@email.com', '', '313131'],
-            ['', 'TestEmail@email.com', '313131', '313131'],
-            ['Sally', 'email.com', '313131', '313131'],
-            ['Sally', 'TestEmail@email.com', '123456789012345', '123456789012345'],
-            ['SellmoSellmoSellmoSellmoSellmoSellmoS', 'TestEmail@email.com', '313131', '313131'],
-            ['Sellmo', '', '313131', '313131'],
+            ['Sally', 'TestEmailTestEmailTestEmailTestEmailTest@email.com', '313131', '313131', 'Тестер', 'Тестеров', 'Тестерович', 'МКК Монетка'],
+            ['Sally', 'TestEmail@email.com', '313131', '', 'Тестер', 'Тестеров', 'Тестерович', 'МКК Монетка'],
+            ['Sally', 'TestEmail@email.com', '', '313131', 'Тестер', 'Тестеров', 'Тестерович', 'МКК Монетка'],
+            ['', 'TestEmail@email.com', '313131', '313131', 'Тестер', 'ТестеровТестерТестерТестерТестерТестер', 'Тестерович', 'МКК Монетка'],
+            ['Sally', 'email.com', '313131', '313131', 'Тестер', 'Тестеров', 'Тестерович', 'МКК Монетка'],
+            ['Sally', 'TestEmail@email.com', '123456789012345', '123456789012345', 'Тестер', 'Тестеров', 'Тестерович', 'МКК Монетка'],
+            ['Sellmo', 'TestEmail@email.com', '313131', '313131', 'ТестерТестерТестерТестерТестер', 'Тестеров', 'Тестерович', 'МКК Монетка'],
+            ['Sellmo', '', '313131', '313131', 'Тестер', 'Тестеров', 'Тестерович', 'МКК Монетка'],
+            ['Sellmo', 'TestEmail@email.com', '313131', '313131', 'Тестер', 'Тестеров', 'Тестерович', 'Длинное Название Компании Длинное Название Компании Длинное Название Компании'],
         ];
     }
 
@@ -95,6 +100,10 @@ class AuthControllerTest extends TestCase
      * @param string|null $email
      * @param string|null $password
      * @param string|null $confirmation
+     * @param string|null $firstName
+     * @param string|null $lastName
+     * @param string|null $middleName
+     * @param string|null $companyName
      * @return void
      * @dataProvider invalidRegisterDataProvider
      */
@@ -102,7 +111,11 @@ class AuthControllerTest extends TestCase
         ?string $userName,
         ?string $email,
         ?string $password,
-        ?string $confirmation
+        ?string $confirmation,
+        ?string $firstName,
+        ?string $lastName,
+        ?string $middleName,
+        ?string $companyName,
     ): void {
         $response = $this->withHeaders([
             'Accept' => 'application/json'
@@ -110,7 +123,11 @@ class AuthControllerTest extends TestCase
             'name' => $userName,
             'email' => $email,
             'password' => $password,
-            'password_confirmation' => $confirmation
+            'password_confirmation' => $confirmation,
+            'first_name' => $firstName,
+            'last_name' => $lastName,
+            'middle_name' => $middleName,
+            'company_name' => $companyName,
         ]);
 
         $response->assertStatus(422);

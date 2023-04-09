@@ -2,13 +2,24 @@
 
 namespace App\Models;
 
+use App\Services\Company\HasCompanyInterface;
 use App\Traits\CompanyRelation;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Kalnoy\Nestedset\NodeTrait;
 
-class Category extends AbstractModel
+/**
+ * @property int $id
+ * @property string $name
+ * @property string $type
+ * @property string $slug
+ * @property int $company_id
+ * @property int $parent_id
+ **/
+class Category extends AbstractModel implements HasCompanyInterface
 {
     use HasFactory, NodeTrait, CompanyRelation;
+
+    protected $guarded = [];
 
     public const TYPE_SYSTEM = 'system';
     public const TYPE_PUBLIC = 'public';
@@ -25,4 +36,12 @@ class Category extends AbstractModel
         self::SLUG_PRODUCTS,
         self::SLUG_SERVICES,
     ];
+
+    /**
+     * @return bool
+     */
+    public function isSystem(): bool
+    {
+        return $this->type === self::TYPE_SYSTEM;
+    }
 }

@@ -21,6 +21,7 @@ return new class extends Migration
             $table->unsignedBigInteger('user_id')->nullable();
             $table->unsignedBigInteger('company_id')->nullable();
             $table->unsignedBigInteger('organization_id')->nullable();
+            $table->unsignedBigInteger('appointment_id')->nullable();
             $table->timestamps();
 
             $table->foreign('user_id')
@@ -36,6 +37,11 @@ return new class extends Migration
             $table->foreign('organization_id')
                 ->references('id')
                 ->on('organizations')
+                ->onDelete('no action');
+
+            $table->foreign('appointment_id')
+                ->references('id')
+                ->on('appointments')
                 ->onDelete('no action');
         });
     }
