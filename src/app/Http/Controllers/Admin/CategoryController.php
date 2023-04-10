@@ -120,7 +120,7 @@ class CategoryController extends Controller
         );
 
         return response()->json([
-            'status' => $isDeleted,
+            'status' => $isDeleted ? 'ok' : 'error',
         ]);
     }
 

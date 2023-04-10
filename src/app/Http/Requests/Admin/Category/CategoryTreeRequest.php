@@ -23,7 +23,7 @@ class CategoryTreeRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'root_category_id' => ['required'],
+            'root_category_id' => ['integer'],
             'company_id' => ['required_if:force,false'],
             'force' => ['bool'],
         ];
