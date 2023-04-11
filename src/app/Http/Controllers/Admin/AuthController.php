@@ -10,15 +10,19 @@ use App\Operations\Company\CompanyOperation;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Log;
+use Psr\Log\LoggerInterface;
 
 class AuthController extends Controller
 {
     protected CompanyOperation $companyOperation;
+    protected LoggerInterface $logger;
 
-    public function __construct(CompanyOperation $companyOperation)
-    {
+    public function __construct(
+        CompanyOperation $companyOperation,
+        LoggerInterface $logger,
+    ) {
         $this->companyOperation = $companyOperation;
+        $this->logger = $logger;
     }
 
     /**
@@ -37,11 +41,11 @@ class AuthController extends Controller
             try {
                 $request->session()->regenerate();
             } catch (\Throwable) {
-                Log::debug('Requester has no session');
+                $this->logger->debug('Requester has no session');
             }
 
             return response()->json([
-                'status' => 'OK',
+                'status' => 'ok',
                 'user' => new UserResource(Auth::user())
             ]);
         }
@@ -71,7 +75,7 @@ class AuthController extends Controller
         Auth::login($user);
 
         return response()->json([
-            'status' => 'OK',
+            'status' => 'ok',
             'user' => new UserResource(Auth::user())
         ]);
     }
@@ -88,11 +92,11 @@ class AuthController extends Controller
             $request->session()->invalidate();
             $request->session()->regenerateToken();
         } catch (\Throwable) {
-            Log::debug('Requester has no session');
+            $this->logger->debug('Requester has no session');
         }
 
         return response()->json([
-            'status' => 'OK',
+            'status' => 'ok',
         ]);
     }
 
