@@ -8,14 +8,19 @@ use App\Models\Permission;
 use App\Models\Role;
 use App\Models\User;
 use App\Operations\CRM\PersonOperation;
+use App\Repositories\User\UserRepository;
 
 class CompanyOperation
 {
     protected PersonOperation $personOperation;
+    protected UserRepository $userRepository;
 
-    public function __construct(PersonOperation $personOperation)
-    {
+    public function __construct(
+        PersonOperation $personOperation,
+        UserRepository $userRepository
+    ) {
         $this->personOperation = $personOperation;
+        $this->userRepository = $userRepository;
     }
 
     /**
@@ -39,8 +44,10 @@ class CompanyOperation
     ): User {
         $company = $this->createBaseCompany($companyName);
         $appointment = $this->createAppointment($company, Appointment::DIRECTOR);
-        $user = $this->createUser($name, $email, $password);
+
+        $user = $this->userRepository->store($name, $email, $password);
         $this->personOperation->create($user, $company, $appointment, $firstName, $lastName, $middleName);
+
         $this->giveBasePermissions($user);
         return $user;
     }
@@ -56,24 +63,6 @@ class CompanyOperation
         $company->save();
 
         return $company;
-    }
-
-    /**
-     * @param string $name
-     * @param string $email
-     * @param string $password
-     * @return User
-     */
-    protected function createUser(string $name, string $email, string $password): User
-    {
-        $user = new User();
-
-        $user->name = $name;
-        $user->email = $email;
-        $user->password = bcrypt($password);
-        $user->save();
-
-        return $user;
     }
 
     /**

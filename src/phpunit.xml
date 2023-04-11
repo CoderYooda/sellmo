@@ -1,9 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:noNamespaceSchemaLocation="./vendor/phpunit/phpunit/phpunit.xsd"
-         bootstrap="vendor/autoload.php"
-         cacheResult ="false"
+<phpunit
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         cacheResult="true"
+         backupGlobals="false"
+         backupStaticAttributes="false"
+         bootstrap="tests/bootstrap.php"
          colors="true"
+         convertErrorsToExceptions="true"
+         convertNoticesToExceptions="true"
+         convertWarningsToExceptions="true"
+         processIsolation="false"
+         stopOnFailure="false"
+         xsi:noNamespaceSchemaLocation="./vendor/phpunit/phpunit/phpunit.xsd"
 >
     <testsuites>
         <testsuite name="Unit">
@@ -13,10 +21,17 @@
             <directory suffix="Test.php">./tests/Feature</directory>
         </testsuite>
     </testsuites>
-    <coverage processUncoveredFiles="true">
+    <coverage
+        processUncoveredFiles="true"
+        ignoreDeprecatedCodeUnits="true"
+        cacheDirectory="./tests/data/coverageCache"
+    >
         <include>
             <directory suffix=".php">./app</directory>
         </include>
+        <exclude>
+            <file>./app/Macros/EmployeeMenu.macro.php</file>
+        </exclude>
     </coverage>
     <php>
         <server name="APP_APP_TIMEZONE" value="Europe/Moscow" force="true" />

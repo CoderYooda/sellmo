@@ -2,11 +2,9 @@
 
 namespace App\Http\Requests\Admin\Category;
 
-use App\Models\Permission;
-use Illuminate\Auth\Access\AuthorizationException;
-use Illuminate\Foundation\Http\FormRequest;
+use App\Http\Requests\Admin\AdminRequest;
 
-class DeleteCategoryRequest extends FormRequest
+class DeleteCategoryRequest extends AdminRequest
 {
     /**
      * @return bool

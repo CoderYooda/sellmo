@@ -3,7 +3,7 @@
 namespace Tests\Unit\Models;
 
 use App\Models\Phone;
-use PHPUnit\Framework\TestCase;
+use Tests\TestCase;
 
 class PhoneTest extends TestCase
 {

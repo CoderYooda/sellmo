@@ -17,6 +17,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
  * @property string|null $middle_name
  * @property int $user_id
  * @property int $company_id
+ * @property Company $company {@see Person::company()}
  **/
 class Person extends AbstractModel
 {

@@ -3,11 +3,9 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Admin\LoginRequest;
-use App\Http\Requests\Admin\RegisterRequest;
+use App\Http\Requests\Admin\Auth\LoginRequest;
+use App\Http\Requests\Admin\Auth\RegisterRequest;
 use App\Http\Resources\Auth\UserResource;
-use App\Models\Person;
-use App\Models\User;
 use App\Operations\Company\CompanyOperation;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;

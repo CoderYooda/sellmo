@@ -35,17 +35,27 @@ Route::group([
 
     });
 });
-
 Route::group([
-    'prefix'    => 'categories',
     'middleware' => ['company', 'auth:sanctum']
 ], function () {
-    Route::post('/', [Admin\CategoryController::class, 'tree'])
-        ->name('admin.categories');
-    Route::post('/create', [Admin\CategoryController::class, 'create'])
-        ->name('admin.categories.create');
-    Route::post('/update', [Admin\CategoryController::class, 'update'])
-        ->name('admin.categories.update');
-    Route::post('/delete', [Admin\CategoryController::class, 'delete'])
-        ->name('admin.categories.delete');
+    Route::group([
+        'prefix'    => 'categories',
+    ], function () {
+        Route::post('/', [Admin\CategoryController::class, 'tree'])
+            ->name('admin.categories');
+        Route::post('/create', [Admin\CategoryController::class, 'create'])
+            ->name('admin.categories.create');
+        Route::post('/update', [Admin\CategoryController::class, 'update'])
+            ->name('admin.categories.update');
+        Route::post('/delete', [Admin\CategoryController::class, 'delete'])
+            ->name('admin.categories.delete');
+    });
+
+    Route::group([
+        'prefix'    => 'pipeline',
+    ], function () {
+        Route::post('/create', [Admin\PipelineController::class, 'create'])
+            ->name('admin.pipeline.create');
+    });
 });
+

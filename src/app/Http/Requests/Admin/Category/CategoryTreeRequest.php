@@ -2,10 +2,10 @@
 
 namespace App\Http\Requests\Admin\Category;
 
+use App\Http\Requests\Admin\AdminRequest;
 use App\Models\Permission;
-use Illuminate\Foundation\Http\FormRequest;
 
-class CategoryTreeRequest extends FormRequest
+class CategoryTreeRequest extends AdminRequest
 {
     /**
      * @return bool

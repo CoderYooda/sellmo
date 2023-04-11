@@ -2,18 +2,20 @@
 
 namespace App\Operations\System;
 
+use App\Exceptions\Operations\Category\CategoryNotFoundException;
 use App\Models\Category;
-use App\Repositories\Category\CategoryRepository;
+use App\Models\Company;
+use App\Repositories\Category\CategoryRepositoryInterface;
 use Illuminate\Database\Eloquent\Collection;
 use Psr\Log\LoggerInterface;
 
 class CategoryOperation
 {
-    protected CategoryRepository $categoryRepository;
+    protected CategoryRepositoryInterface $categoryRepository;
     protected LoggerInterface $logger;
 
     public function __construct(
-        CategoryRepository $categoryRepository,
+        CategoryRepositoryInterface $categoryRepository,
         LoggerInterface $logger
     ) {
         $this->categoryRepository = $categoryRepository;
@@ -21,28 +23,25 @@ class CategoryOperation
     }
 
     /**
-     * @param int $companyId
+     * @param Company $company
      * @param int $parentId
      * @param string $name
      * @param string $type
      * @return Category
      */
     public function create(
-        int $companyId,
+        Company $company,
         int $parentId,
         string $name,
         string $type,
     ): Category {
         $parentCategory = $this->categoryRepository->find($parentId);
-
-        $category = new Category();
-        $category->name = $name;
-        $category->type = $type;
-        $category->company()->associate($companyId);
-        $category->slug = toSlug($name);
-        $category->save();
-
+        $category = $this->categoryRepository->store($name, $type, $company);
         $parentCategory->appendNode($category);
+
+        $this->logger->debug('[CATEGORY] created', [
+            'category' => $category->toArray(),
+        ]);
 
         return $category;
     }
@@ -50,31 +49,27 @@ class CategoryOperation
     /**
      * @param int $categoryId
      * @param int $parentId
-     * @param string $name
+     * @param ?string $name
      * @param string|null $type
      * @return Category
      */
     public function update(
         int $categoryId,
         int $parentId,
-        string $name,
+        ?string $name,
         ?string $type = null
     ): Category {
         $parentCategory = $this->categoryRepository->find($parentId);
         $category = $this->categoryRepository->find($categoryId);
+        $categoryUpdated = $this->categoryRepository->update($category, $name, $type);
 
-        $category->name = $name;
-        $category->type = $type ?? $category->type;
-        $category->slug = toSlug($name);
-        $category->save();
-
-        $parentCategory->appendNode($category);
+        $parentCategory->appendNode($categoryUpdated);
 
         $this->logger->debug('[CATEGORY] updated', [
-            'category' => $category->toArray(),
+            'category' => $categoryUpdated->toArray(),
         ]);
 
-        return $category;
+        return $categoryUpdated;
     }
 
     /**
@@ -86,10 +81,8 @@ class CategoryOperation
         Collection $category,
         int $move_to,
     ): bool {
-
-        $category->each(function ($c) use ($move_to){
-            $c->parent_id = $move_to;
-            $c->save();
+        $category->each(function ($category) use ($move_to){
+            $this->categoryRepository->move($category, $move_to);
         });
 
         $this->logger->debug('[CATEGORY] moved', [
@@ -104,6 +97,7 @@ class CategoryOperation
      * @param bool $recursive
      * @param ?int $move_to
      * @return bool
+     * @throws CategoryNotFoundException
      */
     public function delete(
         int $categoryId,
@@ -111,7 +105,9 @@ class CategoryOperation
         int $move_to = null,
     ): bool {
         $category = $this->categoryRepository->find($categoryId);
-
+        if(!$category){
+            throw new CategoryNotFoundException();
+        }
         if($recursive){
             $category->delete();
             $this->logger->debug('[CATEGORY] deleted recursive', [

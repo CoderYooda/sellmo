@@ -21,6 +21,7 @@ use Spatie\Permission\Traits\HasRoles;
  * @property string $password
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
+ * @property Person $person {@see User::person()}
  */
 class User extends Authenticatable
 {

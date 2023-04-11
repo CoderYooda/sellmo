@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Cache;
 class CompanyMiddleware
 {
     /**
-     * Автоматическое поределение Компании
+     * Автоматическое определение Компании
      *
      * @param \Illuminate\Http\Request $request
      * @param \Closure(\Illuminate\Http\Request): (\Illuminate\Http\Response|\Illuminate\Http\RedirectResponse) $next
@@ -27,16 +27,11 @@ class CompanyMiddleware
             throw new AuthenticationException('no auth');
         }
 
-        $companyId = Cache::remember('user_' . $user->id . '_company', 900, function() use ($user) {
-
-            return $user->getCompany()?->id ?? false;
-        });
-
-        if(!$companyId){
+        if(!$user->person->company){
             throw new AuthenticationException('no company');
         }
 
-        $request->merge(['company_id' => $companyId]);
+        $request->merge(['user' => $user]);
 
         return $next($request);
     }

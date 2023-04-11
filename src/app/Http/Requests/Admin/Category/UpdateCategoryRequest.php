@@ -2,11 +2,9 @@
 
 namespace App\Http\Requests\Admin\Category;
 
-use App\Models\Permission;
-use Illuminate\Auth\Access\AuthorizationException;
-use Illuminate\Foundation\Http\FormRequest;
+use App\Http\Requests\Admin\AdminRequest;
 
-class UpdateCategoryRequest extends FormRequest
+class UpdateCategoryRequest extends AdminRequest
 {
     /**
      * @return bool
@@ -26,7 +24,7 @@ class UpdateCategoryRequest extends FormRequest
         return [
             'parent_id' => ['required', 'integer', 'exists:categories,id'],
             'category_id' => ['required', 'integer', 'exists:categories,id'],
-            'name' => ['required', 'string', 'max:24'],
+            'name' => ['string', 'max:24'],
         ];
     }
 
@@ -47,10 +45,14 @@ class UpdateCategoryRequest extends FormRequest
     }
 
     /**
-     * @return string
+     * @return ?string
      */
-    public function getName(): string
+    public function getName(): ?string
     {
+        if(!isset($this->validated()['name'])){
+            return null;
+        }
+
         return preg_replace( "/[^a-zA-ZА-Яа-я0-9\s]+/u", '', $this->validated()['name'] );
     }
 

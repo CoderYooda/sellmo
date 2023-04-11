@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests\Admin\Category;
+namespace App\Http\Requests\Admin\Pipeline;
 
 use App\Http\Requests\Admin\AdminRequest;
 
-class CreateCategoryRequest extends AdminRequest
+class CreatePipelineRequest extends AdminRequest
 {
     /**
      * @return bool
@@ -22,18 +22,8 @@ class CreateCategoryRequest extends AdminRequest
     public function rules(): array
     {
         return [
-            'parent_id' => ['required', 'integer', 'exists:categories,id'],
-            'company_id' => ['required'],
             'name' => ['required', 'string', 'max:24'],
         ];
-    }
-
-    /**
-     * @return int
-     */
-    public function getParentId(): int
-    {
-        return $this->validated()['parent_id'];
     }
 
     /**

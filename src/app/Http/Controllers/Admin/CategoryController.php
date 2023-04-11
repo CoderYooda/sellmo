@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Exceptions\Operations\Category\CategoryNotFoundException;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\Category\CategoryTreeRequest;
 use App\Http\Requests\Admin\Category\CreateCategoryRequest;
@@ -10,19 +11,19 @@ use App\Http\Requests\Admin\Category\UpdateCategoryRequest;
 use App\Models\Category;
 use App\Models\User;
 use App\Operations\System\CategoryOperation;
-use App\Repositories\Category\CategoryRepository;
+use App\Repositories\Category\CategoryRepositoryInterface;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\JsonResponse;
 use Psr\Log\LoggerInterface;
 
 class CategoryController extends Controller
 {
-    protected CategoryRepository $categoryRepository;
+    protected CategoryRepositoryInterface $categoryRepository;
     protected CategoryOperation $categoryOperation;
     protected LoggerInterface $logger;
 
     public function __construct(
-        CategoryRepository $categoryRepository,
+        CategoryRepositoryInterface $categoryRepository,
         CategoryOperation $categoryOperation,
         LoggerInterface $logger,
     ) {
@@ -54,7 +55,7 @@ class CategoryController extends Controller
 
         $categories = $this->categoryRepository->getCategoriesTree(
             $request->getRootCategoryId(),
-            $request->getCompanyId(),
+            $request->user()->person->company,
             $request->isForce()
         );
 
@@ -68,12 +69,13 @@ class CategoryController extends Controller
      * @return JsonResponse
      * @throws AuthorizationException
      */
-    public function create(CreateCategoryRequest $request): JsonResponse
-    {
+    public function create(
+        CreateCategoryRequest $request
+    ): JsonResponse {
         $this->checkAccess($request->user(), $request->getParentId());
 
         $category = $this->categoryOperation->create(
-            $request->getCompanyId(),
+            $request->user()->person->company,
             $request->getParentId(),
             $request->getName(),
             Category::TYPE_PUBLIC
@@ -89,8 +91,9 @@ class CategoryController extends Controller
      * @return JsonResponse
      * @throws AuthorizationException
      */
-    public function update(UpdateCategoryRequest $request): JsonResponse
-    {
+    public function update(
+        UpdateCategoryRequest $request
+    ): JsonResponse {
         $this->checkAccess($request->user(), $request->getCategoryId());
 
         $category = $this->categoryOperation->update(
@@ -107,10 +110,11 @@ class CategoryController extends Controller
     /**
      * @param DeleteCategoryRequest $request
      * @return JsonResponse
-     * @throws AuthorizationException
+     * @throws AuthorizationException|CategoryNotFoundException
      */
-    public function delete(DeleteCategoryRequest $request): JsonResponse
-    {
+    public function delete(
+        DeleteCategoryRequest $request
+    ): JsonResponse {
         $this->checkAccess($request->user(), $request->getCategoryId());
 
         $isDeleted = $this->categoryOperation->delete(
@@ -127,8 +131,10 @@ class CategoryController extends Controller
     /**
      * @throws AuthorizationException
      */
-    protected function checkAccess(User $user, int $categoryId): void
-    {
+    protected function checkAccess(
+        User $user,
+        int $categoryId
+    ): void {
         $cannotUse = $user->cannot('useCategory', [
             'category' => Category::find($categoryId)
         ]);
