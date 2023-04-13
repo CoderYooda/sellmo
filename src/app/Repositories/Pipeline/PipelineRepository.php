@@ -7,6 +7,16 @@ use App\Models\TaskTracker\Pipeline;
 
 class PipelineRepository implements PipelineRepositoryInterface
 {
+    public function find(int $id): ?Pipeline
+    {
+        /** @var Pipeline $pipeline */
+        $pipeline = Pipeline::query()
+            ->where('id', $id)
+            ->first();
+
+        return $pipeline;
+    }
+
     /**
      * @param string $name
      * @param Company $company
@@ -22,5 +32,30 @@ class PipelineRepository implements PipelineRepositoryInterface
         $pipeline->save();
 
         return $pipeline;
+    }
+
+    /**
+     * @param Pipeline $pipeline
+     * @param string $name
+     * @return Pipeline
+     */
+    public function update(
+        Pipeline $pipeline,
+        string $name
+    ): Pipeline {
+        $pipeline->name = $name;
+        $pipeline->save();
+
+        return $pipeline;
+    }
+
+    /**
+     * @param Pipeline $pipeline
+     * @return bool
+     */
+    public function delete(
+        Pipeline $pipeline
+    ): bool {
+        return $pipeline->delete();
     }
 }

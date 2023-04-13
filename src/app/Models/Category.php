@@ -14,6 +14,7 @@ use Kalnoy\Nestedset\NodeTrait;
  * @property string $slug
  * @property int $company_id
  * @property int $parent_id
+ * @property Company $company {@see Category::company()}
  **/
 class Category extends AbstractModel implements HasCompanyInterface
 {

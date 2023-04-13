@@ -27,7 +27,7 @@ class CompanyMiddleware
             throw new AuthenticationException('no auth');
         }
 
-        if(!$user->person->company){
+        if(!$user->person && !$user->person->company){
             throw new AuthenticationException('no company');
         }
 

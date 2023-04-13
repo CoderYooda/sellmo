@@ -2,7 +2,7 @@
 
 namespace Tests\Unit\Operations;
 
-use App\Exceptions\Operations\Category\CategoryNotFoundException;
+use App\Models\Category;
 use App\Operations\System\CategoryOperation;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Tests\TestCase;
@@ -15,10 +15,8 @@ class CategoryOperationTest extends TestCase
     {
         /** @var CategoryOperation $categoryOperation */
         $categoryOperation = resolve(CategoryOperation::class);
+        $category = new Category();
 
-        $this->assertThrows(function() use ($categoryOperation) {
-            $categoryOperation->delete(21,1);
-        }, CategoryNotFoundException::class);
-
+        $this->assertTrue($categoryOperation->delete($category,1));
     }
 }

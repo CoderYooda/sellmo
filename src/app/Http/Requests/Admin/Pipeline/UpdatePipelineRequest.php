@@ -4,7 +4,7 @@ namespace App\Http\Requests\Admin\Pipeline;
 
 use App\Http\Requests\Admin\AdminRequest;
 
-class CreatePipelineRequest extends AdminRequest
+class UpdatePipelineRequest extends AdminRequest
 {
     /**
      * @return bool
@@ -23,6 +23,7 @@ class CreatePipelineRequest extends AdminRequest
     {
         return [
             'name' => ['required', 'string', 'regex:/^[a-zA-ZА-Яа-я0-9 ]+$/u', 'max:24'],
+            'pipeline_id' => ['required', 'integer', 'exists:pipelines,id'],
         ];
     }
 
@@ -32,6 +33,14 @@ class CreatePipelineRequest extends AdminRequest
     public function getName(): string
     {
         return $this->validated()['name'];
+    }
+
+    /**
+     * @return int
+     */
+    public function getPipelineId(): int
+    {
+        return $this->validated()['pipeline_id'];
     }
 
     /**

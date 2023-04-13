@@ -56,6 +56,15 @@ Route::group([
     ], function () {
         Route::post('/create', [Admin\PipelineController::class, 'create'])
             ->name('admin.pipeline.create');
+        Route::post('/update', [Admin\PipelineController::class, 'update'])
+            ->name('admin.pipeline.update');
+        Route::post('/delete', [Admin\PipelineController::class, 'delete'])
+            ->name('admin.pipeline.delete');
+
+        Route::post('/stages/create', [Admin\PipelineStageController::class, 'create'])
+            ->name('admin.pipeline.stage.create');
+        Route::post('/stages/update', [Admin\PipelineStageController::class, 'update'])
+            ->name('admin.pipeline.stage.update');
     });
 });
 

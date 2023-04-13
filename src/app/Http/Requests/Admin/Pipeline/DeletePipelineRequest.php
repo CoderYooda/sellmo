@@ -4,7 +4,7 @@ namespace App\Http\Requests\Admin\Pipeline;
 
 use App\Http\Requests\Admin\AdminRequest;
 
-class CreatePipelineRequest extends AdminRequest
+class DeletePipelineRequest extends AdminRequest
 {
     /**
      * @return bool
@@ -22,16 +22,16 @@ class CreatePipelineRequest extends AdminRequest
     public function rules(): array
     {
         return [
-            'name' => ['required', 'string', 'regex:/^[a-zA-ZА-Яа-я0-9 ]+$/u', 'max:24'],
+            'pipeline_id' => ['required', 'integer', 'exists:pipelines,id'],
         ];
     }
 
     /**
-     * @return string
+     * @return int
      */
-    public function getName(): string
+    public function getPipelineId(): int
     {
-        return $this->validated()['name'];
+        return $this->validated()['pipeline_id'];
     }
 
     /**

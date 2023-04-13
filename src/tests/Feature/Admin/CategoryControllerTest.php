@@ -82,11 +82,9 @@ class CategoryControllerTest extends TestCase
         ])->post('/categories/create', [
             'parent_id' => $this->rootCatgory->id,
             'name' => 'Новая категория компании',
-            'company_id' => $this->ownCompany->id,
         ]);
 
         $responseArray = json_decode($response->getContent(), true);
-
         $this->assertEquals('novayakategoriyakompanii', $responseArray['category']['slug']);
         $this->assertEquals($this->ownCompany->id, $responseArray['category']['company_id']);
         $this->assertEquals($this->rootCatgory->id, $responseArray['category']['parent_id']);

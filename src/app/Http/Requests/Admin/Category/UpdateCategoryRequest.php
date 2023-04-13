@@ -24,7 +24,7 @@ class UpdateCategoryRequest extends AdminRequest
         return [
             'parent_id' => ['required', 'integer', 'exists:categories,id'],
             'category_id' => ['required', 'integer', 'exists:categories,id'],
-            'name' => ['string', 'max:24'],
+            'name' => ['string', 'regex:/^[a-zA-ZА-Яа-я0-9 ]+$/u', 'max:24'],
         ];
     }
 
@@ -53,7 +53,7 @@ class UpdateCategoryRequest extends AdminRequest
             return null;
         }
 
-        return preg_replace( "/[^a-zA-ZА-Яа-я0-9\s]+/u", '', $this->validated()['name'] );
+        return $this->validated()['name'];
     }
 
     /**

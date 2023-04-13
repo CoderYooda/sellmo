@@ -56,7 +56,7 @@ class CategoryRepository implements CategoryRepositoryInterface
         /** @var Category $category */
         $category = Category::query()
             ->where('id', $id)
-            ->first();
+            ->firstOrFail();
 
         return $category;
     }

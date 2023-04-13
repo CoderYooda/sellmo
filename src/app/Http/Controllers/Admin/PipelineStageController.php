@@ -4,40 +4,49 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\Pipeline\CreatePipelineRequest;
+use App\Http\Requests\Admin\Pipeline\CreatePipelineStageRequest;
 use App\Http\Requests\Admin\Pipeline\DeletePipelineRequest;
 use App\Http\Requests\Admin\Pipeline\UpdatePipelineRequest;
+use App\Http\Requests\Admin\Pipeline\UpdatePipelineStageRequest;
 use App\Operations\CRM\PipelineOperation;
 use App\Repositories\Pipeline\PipelineRepository;
+use App\Repositories\Pipeline\PipelineStageRepository;
 use App\Services\Core\CompanyProtection\CheckCompanyAccess;
 use App\Services\Core\CompanyProtection\CompanyProtectionContract;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\JsonResponse;
 
-class PipelineController extends Controller implements CompanyProtectionContract
+class PipelineStageController extends Controller implements CompanyProtectionContract
 {
     use CheckCompanyAccess;
 
     protected PipelineOperation $pipelineOperation;
+    protected PipelineStageRepository $pipelineStageRepository;
     protected PipelineRepository $pipelineRepository;
 
     public function __construct(
         PipelineOperation $pipelineOperation,
+        PipelineStageRepository $pipelineStageRepository,
         PipelineRepository $pipelineRepository
     ) {
         $this->pipelineOperation = $pipelineOperation;
+        $this->pipelineStageRepository = $pipelineStageRepository;
         $this->pipelineRepository = $pipelineRepository;
     }
 
     /**
-     * @param CreatePipelineRequest $request
+     * @param CreatePipelineStageRequest $request
      * @return JsonResponse
      */
     public function create(
-        CreatePipelineRequest $request
+        CreatePipelineStageRequest $request
     ): JsonResponse {
-        $pipeline = $this->pipelineOperation->create(
-            $request->company(),
-            $request->getName()
+        $pipeline = $this->pipelineRepository->find($request->getPipelineId());
+
+        $pipeline = $this->pipelineOperation->createStage(
+            $pipeline,
+            $request->getName(),
+            $request->getOrder(),
         );
 
         return response()->json([
@@ -46,23 +55,24 @@ class PipelineController extends Controller implements CompanyProtectionContract
     }
 
     /**
-     * @param UpdatePipelineRequest $request
+     * @param UpdatePipelineStageRequest $request
      * @return JsonResponse
      * @throws AuthorizationException
      */
     public function update(
-        UpdatePipelineRequest $request
+        UpdatePipelineStageRequest $request
     ): JsonResponse {
-        $pipeline = $this->pipelineRepository->find($request->getPipelineId());
-        $this->checkAccess($request->user(), $pipeline);
+        $pipelineStage = $this->pipelineStageRepository->find($request->getPipelineStageId());
+        $this->checkAccess($request->user(), $pipelineStage);
 
-        $pipeline = $this->pipelineOperation->update(
-            $pipeline,
+        $pipelineStage = $this->pipelineOperation->updateStage(
+            $pipelineStage,
             $request->getName(),
+            $request->getOrder(),
         );
 
         return response()->json([
-            'pipeline' => $pipeline->toArray(),
+            'pipeline' => $pipelineStage->toArray(),
         ]);
     }
 

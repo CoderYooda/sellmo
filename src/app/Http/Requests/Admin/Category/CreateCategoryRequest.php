@@ -23,8 +23,7 @@ class CreateCategoryRequest extends AdminRequest
     {
         return [
             'parent_id' => ['required', 'integer', 'exists:categories,id'],
-            'company_id' => ['required'],
-            'name' => ['required', 'string', 'max:24'],
+            'name' => ['required', 'string', 'regex:/^[a-zA-ZА-Яа-я0-9 ]+$/u', 'max:24'],
         ];
     }
 
@@ -41,14 +40,6 @@ class CreateCategoryRequest extends AdminRequest
      */
     public function getName(): string
     {
-        return preg_replace( "/[^a-zA-ZА-Яа-я0-9\s]+/u", '', $this->validated()['name'] );
-    }
-
-    /**
-     * @return int
-     */
-    public function getCompanyId(): int
-    {
-        return (int) $this->validated()['company_id'];
+        return $this->validated()['name'];
     }
 }
