@@ -3,10 +3,8 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Admin\Pipeline\CreatePipelineRequest;
 use App\Http\Requests\Admin\Pipeline\CreatePipelineStageRequest;
-use App\Http\Requests\Admin\Pipeline\DeletePipelineRequest;
-use App\Http\Requests\Admin\Pipeline\UpdatePipelineRequest;
+use App\Http\Requests\Admin\Pipeline\DeletePipelineStageRequest;
 use App\Http\Requests\Admin\Pipeline\UpdatePipelineStageRequest;
 use App\Operations\CRM\PipelineOperation;
 use App\Repositories\Pipeline\PipelineRepository;
@@ -77,16 +75,16 @@ class PipelineStageController extends Controller implements CompanyProtectionCon
     }
 
     /**
-     * @param DeletePipelineRequest $request
+     * @param DeletePipelineStageRequest $request
      * @return JsonResponse
      * @throws AuthorizationException
      */
     public function delete(
-        DeletePipelineRequest $request
+        DeletePipelineStageRequest $request
     ): JsonResponse {
-        $pipeline = $this->pipelineRepository->find($request->getPipelineId());
-        $this->checkAccess($request->user(), $pipeline);
-        $isDeleted = $this->pipelineOperation->delete($pipeline);
+        $pipelineStage = $this->pipelineStageRepository->find($request->getPipelineStageId());
+        $this->checkAccess($request->user(), $pipelineStage);
+        $isDeleted = $this->pipelineOperation->deleteStage($pipelineStage);
 
         return response()->json([
             'status' => $isDeleted ? 'ok' : 'error',

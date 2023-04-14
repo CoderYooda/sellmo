@@ -90,4 +90,14 @@ class PipelineOperation
             $order
         );
     }
+
+    /**
+     * @param PipelineStage $pipelineStage
+     * @return bool
+     */
+    public function deleteStage(
+        PipelineStage $pipelineStage
+    ): bool {
+        return $this->pipelineStageRepository->delete($pipelineStage);
+    }
 }

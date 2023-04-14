@@ -4,7 +4,7 @@ namespace App\Http\Requests\Admin\Pipeline;
 
 use App\Http\Requests\Admin\AdminRequest;
 
-class DeletePipelineRequest extends AdminRequest
+class DeletePipelineStageRequest extends AdminRequest
 {
     /**
      * @return bool
@@ -22,15 +22,15 @@ class DeletePipelineRequest extends AdminRequest
     public function rules(): array
     {
         return [
-            'pipeline_id' => ['required', 'integer', 'exists:pipelines,id'],
+            'pipeline_stage_id' => ['required', 'integer', 'exists:pipeline_stages,id'],
         ];
     }
 
     /**
      * @return int
      */
-    public function getPipelineId(): int
+    public function getPipelineStageId(): int
     {
-        return $this->validated()['pipeline_id'];
+        return $this->validated()['pipeline_stage_id'];
     }
 }

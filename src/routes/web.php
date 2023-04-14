@@ -65,6 +65,8 @@ Route::group([
             ->name('admin.pipeline.stage.create');
         Route::post('/stages/update', [Admin\PipelineStageController::class, 'update'])
             ->name('admin.pipeline.stage.update');
+        Route::post('/stages/delete', [Admin\PipelineStageController::class, 'delete'])
+            ->name('admin.pipeline.stage.delete');
     });
 });
 
