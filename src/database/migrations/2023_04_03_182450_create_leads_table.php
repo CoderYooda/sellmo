@@ -20,10 +20,12 @@ return new class extends Migration
             $table->text('description');
             $table->decimal('lead_value', 12)->nullable();
             $table->string('status');
-            $table->string('lost_reason');
-            $table->dateTime('closed_at');
+            $table->string('lost_reason')->nullable();
+            $table->dateTime('closed_at')->nullable();
             $table->unsignedBigInteger('lead_source_id');
             $table->unsignedBigInteger('creator_id');
+            $table->unsignedBigInteger('manager_id')->nullable();
+            $table->unsignedBigInteger('organization_id')->nullable();
             $table->unsignedBigInteger('person_id');
             $table->unsignedBigInteger('lead_type_id');
             $table->unsignedBigInteger('pipeline_id');
@@ -34,6 +36,16 @@ return new class extends Migration
             $table->foreign('creator_id')
                 ->references('id')
                 ->on('persons')
+                ->onDelete('no action');
+
+            $table->foreign('manager_id')
+                ->references('id')
+                ->on('persons')
+                ->onDelete('no action');
+
+            $table->foreign('organization_id')
+                ->references('id')
+                ->on('organizations')
                 ->onDelete('no action');
 
             $table->foreign('person_id')

@@ -9,6 +9,7 @@ use App\Http\Requests\Admin\Pipeline\UpdatePipelineStageRequest;
 use App\Operations\CRM\PipelineOperation;
 use App\Repositories\Pipeline\PipelineRepository;
 use App\Repositories\Pipeline\PipelineStageRepository;
+use App\Repositories\Pipeline\PipelineStageRepositoryInterface;
 use App\Services\Core\CompanyProtection\CheckCompanyAccess;
 use App\Services\Core\CompanyProtection\CompanyProtectionContract;
 use Illuminate\Auth\Access\AuthorizationException;
@@ -19,13 +20,13 @@ class PipelineStageController extends Controller implements CompanyProtectionCon
     use CheckCompanyAccess;
 
     protected PipelineOperation $pipelineOperation;
-    protected PipelineStageRepository $pipelineStageRepository;
+    protected PipelineStageRepositoryInterface $pipelineStageRepository;
     protected PipelineRepository $pipelineRepository;
 
     public function __construct(
-        PipelineOperation $pipelineOperation,
+        PipelineOperation    $pipelineOperation,
         PipelineStageRepository $pipelineStageRepository,
-        PipelineRepository $pipelineRepository
+        PipelineRepository   $pipelineRepository
     ) {
         $this->pipelineOperation = $pipelineOperation;
         $this->pipelineStageRepository = $pipelineStageRepository;

@@ -15,7 +15,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property string $slug
  * @property int $order
  * @property Company $company {@see PipelineStage::company()}
- * @property Company $pipeline {@see PipelineStage::pipeline()}
+ * @property Pipeline $pipeline {@see PipelineStage::pipeline()}
  **/
 class PipelineStage extends AbstractModel implements HasCompanyInterface
 {

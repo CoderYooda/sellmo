@@ -14,7 +14,7 @@ class PipelineOperation
     protected PipelineStageRepositoryInterface $pipelineStageRepository;
 
     public function __construct(
-        PipelineRepositoryInterface $pipelineRepository,
+        PipelineRepositoryInterface   $pipelineRepository,
         PipelineStageRepositoryInterface $pipelineStageRepository,
     ) {
         $this->pipelineRepository = $pipelineRepository;

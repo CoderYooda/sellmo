@@ -11,7 +11,7 @@ class CreateBasePermissions extends AddPermissions
      */
     public function getPermissionNames(): array
     {
-        return Permission::DEFAULT_ADMIN_PERMISSIONS;
+        return Permission::DEFAULT_DIRECTOR_PERMISSIONS;
     }
 
     /**

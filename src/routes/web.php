@@ -68,5 +68,62 @@ Route::group([
         Route::post('/stages/delete', [Admin\PipelineStageController::class, 'delete'])
             ->name('admin.pipeline.stage.delete');
     });
+
+    Route::group([
+        'prefix'    => 'organization',
+    ], function () {
+        Route::post('/', [Admin\OrganizationController::class, 'list'])
+            ->name('admin.organization.list');
+        Route::post('/create', [Admin\OrganizationController::class, 'create'])
+            ->name('admin.organization.create');
+        Route::post('/update', [Admin\OrganizationController::class, 'update'])
+            ->name('admin.organization.update');
+        Route::post('/delete', [Admin\OrganizationController::class, 'delete'])
+            ->name('admin.organization.delete');
+    });
+
+    Route::group([
+        'prefix'    => 'person',
+    ], function () {
+        Route::post('/', [Admin\PersonController::class, 'list'])
+            ->name('admin.organization.list');
+        Route::post('/create', [Admin\PersonController::class, 'create'])
+            ->name('admin.organization.create');
+        Route::post('/update', [Admin\PersonController::class, 'update'])
+            ->name('admin.organization.update');
+        Route::post('/delete', [Admin\PersonController::class, 'delete'])
+            ->name('admin.organization.delete');
+    });
+
+    Route::group([
+        'prefix'    => 'lead',
+    ], function () {
+        Route::group([
+            'prefix'    => 'type',
+        ], function () {
+            Route::post('/', [Admin\LeadTypeController::class, 'list'])
+                ->name('admin.lead.type.list');
+            Route::post('/create', [Admin\LeadTypeController::class, 'create'])
+                ->name('admin.lead.type.create');
+            Route::post('/update', [Admin\LeadTypeController::class, 'update'])
+                ->name('admin.lead.type.update');
+            Route::post('/delete', [Admin\LeadTypeController::class, 'delete'])
+                ->name('admin.lead.type.delete');
+        });
+        Route::group([
+            'prefix'    => 'source',
+        ], function () {
+            Route::post('/', [Admin\LeadSourceController::class, 'list'])
+                ->name('admin.lead.source.list');
+            Route::post('/create', [Admin\LeadSourceController::class, 'create'])
+                ->name('admin.lead.source.create');
+            Route::post('/update', [Admin\LeadSourceController::class, 'update'])
+                ->name('admin.lead.source.update');
+            Route::post('/delete', [Admin\LeadSourceController::class, 'delete'])
+                ->name('admin.lead.source.delete');
+        });
+        Route::post('/create', [Admin\LeadController::class, 'create'])
+            ->name('admin.lead.create');
+    });
 });
 
