@@ -29,6 +29,10 @@ class Permission extends \Spatie\Permission\Models\Permission
     public const CAN_UPDATE_ORGANIZATION = 'update_organization';
     public const CAN_DELETE_ORGANIZATION = 'delete_organization';
 
+    public const CAN_CREATE_PRODUCT = 'create_product';
+    public const CAN_UPDATE_PRODUCT = 'update_product';
+    public const CAN_DELETE_PRODUCT = 'delete_product';
+
     public const DEFAULT_DIRECTOR_PERMISSIONS = [
         self::CAN_CREATE_CATEGORY,
         self::CAN_UPDATE_CATEGORY,
@@ -48,5 +52,8 @@ class Permission extends \Spatie\Permission\Models\Permission
         self::CAN_CREATE_ORGANIZATION,
         self::CAN_UPDATE_ORGANIZATION,
         self::CAN_DELETE_ORGANIZATION,
+        self::CAN_CREATE_PRODUCT,
+        self::CAN_UPDATE_PRODUCT,
+        self::CAN_DELETE_PRODUCT,
     ];
 }

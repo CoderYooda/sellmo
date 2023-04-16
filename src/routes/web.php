@@ -96,6 +96,15 @@ Route::group([
     });
 
     Route::group([
+        'prefix'    => 'product',
+    ], function () {
+        Route::post('/', [Admin\ProductController::class, 'list'])
+            ->name('admin.product.list');
+        Route::post('/create', [Admin\ProductController::class, 'create'])
+            ->name('admin.product.create');
+    });
+
+    Route::group([
         'prefix'    => 'lead',
     ], function () {
         Route::group([

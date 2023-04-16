@@ -8,6 +8,8 @@ use App\Repositories\CRM\OrganizationRepository;
 use App\Repositories\CRM\OrganizationRepositoryInterface;
 use App\Repositories\CRM\PersonRepository;
 use App\Repositories\CRM\PersonRepositoryInterface;
+use App\Repositories\Ecommerce\ProductRepository;
+use App\Repositories\Ecommerce\ProductRepositoryInterface;
 use App\Repositories\Lead\LeadRepository;
 use App\Repositories\Lead\LeadRepositoryInterface;
 use App\Repositories\Lead\LeadTypeRepository;
@@ -32,6 +34,7 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(LeadRepositoryInterface::class, LeadRepository::class);
         $this->app->bind(PersonRepositoryInterface::class, PersonRepository::class);
         $this->app->bind(OrganizationRepositoryInterface::class, OrganizationRepository::class);
+        $this->app->bind(ProductRepositoryInterface::class, ProductRepository::class);
     }
 }
 
