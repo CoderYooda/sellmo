@@ -51,7 +51,11 @@ class AuthController extends Controller
         }
 
         return response()->json([
-            'status' => 'error',
+            'errors' => [
+               'email' => [
+                   'Учетной записи не существует'
+               ]
+            ],
             'message' => 'Данные не верны'
         ], 503);
     }

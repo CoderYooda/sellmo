@@ -49,7 +49,7 @@ class CategoryController extends Controller implements CompanyProtectionContract
      * @return JsonResponse
      * @throws AuthorizationException
      */
-    public function tree(CategoryTreeRequest $request): JsonResponse
+    public function index(CategoryTreeRequest $request): JsonResponse
     {
         if(!$request->canAccessIfForce()){
             throw new AuthorizationException();

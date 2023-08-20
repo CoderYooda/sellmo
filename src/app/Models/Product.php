@@ -11,6 +11,9 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property string $sku
  * @property string $name
  * @property string $type
+ * @property int $price
+ * @property string $slug
+ * @property int $special_price
  * @property int $company_id
  * @property int $category_id
  * @property Company $company {@see Product::company()}

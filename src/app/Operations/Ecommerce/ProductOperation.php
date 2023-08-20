@@ -27,6 +27,9 @@ class ProductOperation
      * @param string $sku
      * @param string $name
      * @param string $type
+     * @param int $price
+     * @param string|null $slug
+     * @param int|null $specialPrice
      * @return Product
      */
     public function create(
@@ -34,14 +37,30 @@ class ProductOperation
         Category $category,
         string $sku,
         string $name,
-        string $type
+        string $type,
+        int $price,
+        ?string $slug = null,
+        ?int $specialPrice = null,
     ): Product {
         return $this->productRepository->store(
             $company,
             $category,
             $sku,
             $name,
-            $type
+            $type,
+            $price,
+            $this->getSlug($name, $slug),
+            $specialPrice
         );
+    }
+
+    /**
+     * @param string $name
+     * @param string|null $slug
+     * @return string
+     */
+    protected function getSlug(string $name, ?string $slug = null ): string
+    {
+        return $slug ?: toSlug($name);
     }
 }

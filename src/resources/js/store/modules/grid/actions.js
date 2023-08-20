@@ -1,11 +1,11 @@
 export default ({
-    async LIST({ getters, commit }, request) {
+    async INDEX({ getters, commit }, request) {
         try {
             let params = {};
             prepareSortData(request, params);
             const { data } = await axios({
                 method: 'GET',
-                url: '/' + request.entity + '/list',
+                url: '/' + request.entity,
                 params: params
             });
 

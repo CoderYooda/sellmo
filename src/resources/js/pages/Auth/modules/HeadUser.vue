@@ -58,7 +58,7 @@ export default {
 
         logout() {
             this.LOGOUT().then((resp) => {
-                if (resp.data && resp.data.status === "OK") {
+                if (resp.data && resp.data.status === "ok") {
                     this.SET_AUTHENTICATED(false);
                     this.$router.push({ name: 'login'});
                 }

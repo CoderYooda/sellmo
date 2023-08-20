@@ -2,6 +2,24 @@
 
 declare(strict_types=1);
 
+if (!function_exists('isLocalStand')) {
+    function isLocalStand(): bool
+    {
+        return (string) config('app.env') === \App\Dictionary::APPLICATION_STAND_LOCAL;
+    }
+}
+if (!function_exists('isStageStand')) {
+    function isStageStand(): bool
+    {
+        return (string) config('app.env') === \App\Dictionary::APPLICATION_STAND_STAGING;
+    }
+}
+if (!function_exists('isProductionStand')) {
+    function isProductionStand(): bool
+    {
+        return (string) config('app.env') === \App\Dictionary::APPLICATION_STAND_PRODUCTION;
+    }
+}
 if (!function_exists('phoneToFormat')) {
     /**
      * Приводит номер телефона к переданному формату

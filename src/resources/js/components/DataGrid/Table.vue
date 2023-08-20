@@ -1,5 +1,5 @@
 <template>
-    <div class="data_grid_container">
+    <div class="data_grid_container" v-if="loaded">
         <div class="grid_actions">
             <div v-if="enableSearch" class="search_container">
                 <input v-if="enableSearch" class="search" placeholder="Поиск по таблице" type="text" v-model.trim="reqData.search"  v-debounce:400ms="search">
@@ -74,6 +74,7 @@ export default {
     name: "Table",
     data() {
         return {
+            loaded: false,
             reqData: {
                 search: "",
                 per_page: null,
@@ -83,6 +84,7 @@ export default {
                     value:null,
                 }
             },
+            enableMassActions: null,
             index: 'id',
             visible:[],
             selected: [],
@@ -152,13 +154,14 @@ export default {
         this.getItemsList();
     },
     methods:{
-        ...mapActions('grid', ['LIST']),
+        ...mapActions('grid', ['INDEX']),
 
         async getItemsList() {
-            let resp = await this.LIST({
+            let resp = await this.INDEX({
                 params: this.reqData,
                 entity: this.$attrs.entity,
             });
+            this.loaded = true;
             this.reqData.per_page = resp.itemsPerPage;
         },
         isColumnActive(column){

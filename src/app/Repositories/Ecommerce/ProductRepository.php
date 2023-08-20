@@ -5,10 +5,25 @@ namespace App\Repositories\Ecommerce;
 use App\Models\Category;
 use App\Models\Company;
 use App\Models\Product;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Collection;
 
 class ProductRepository implements ProductRepositoryInterface
 {
+    public function gridQueryBuilder(): Builder
+    {
+        return Product::query()
+            ->select(
+                'products.id',
+                'products.name',
+                'products.type',
+                'products.sku',
+                'products.price',
+                'products.special_price',
+            );
+    }
+
+
     /**
      * @return Collection|null
      */
@@ -41,6 +56,9 @@ class ProductRepository implements ProductRepositoryInterface
      * @param string $sku
      * @param string $name
      * @param string $type
+     * @param int $price
+     * @param string $slug
+     * @param int|null $specialPrice
      * @return Product
      */
     public function store(
@@ -48,13 +66,19 @@ class ProductRepository implements ProductRepositoryInterface
      Category $category,
      string $sku,
      string $name,
-     string $type
+     string $type,
+     int $price,
+     string $slug,
+     ?int $specialPrice = null
     ): Product {
         $product = new Product();
 
         $product->sku = $sku;
         $product->name = $name;
         $product->type = $type;
+        $product->price = $price;
+        $product->slug = $slug;
+        $product->special_price = $specialPrice;
         $product->category()->associate($category);
         $product->company()->associate($company);
         $product->save();

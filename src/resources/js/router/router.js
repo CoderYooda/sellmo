@@ -72,6 +72,13 @@ const routes = [
         component: () => import('../pages/Ecommerce/Product/Products.vue'),
     },
     {
+        path: '/ecommerce/products/new',
+        name: 'ecommerce_products_new',
+        props: true,
+        meta: {layout: 'main'},
+        component: () => import('../pages/Ecommerce/Product/Product.vue'),
+    },
+    {
         path: '/company/settings',
         name: 'company_settings',
         props: true,
@@ -87,8 +94,13 @@ const router = createRouter({
     linkExactActiveClass: 'active'
 });
 
-router.beforeEach((to, from, next) => {
+router.beforeEach((
+    to,
+    from,
+    next
+) => {
     if (to.meta.auth && !store.getters['auth/AUTHENTICATED']) {
+        console.log(123);
         next({ name: 'login' });
     } else if (to.meta.redirectIfAuthenticated && store.getters['auth/AUTHENTICATED']) {
         next(from);

@@ -1,5 +1,3 @@
-import store from "../../store";
-
 export default ({
     async LOGIN({ getters, commit }, loginData) {
         await axios.get('/sanctum/csrf-cookie')
@@ -30,9 +28,9 @@ export default ({
 
             commit('SET_AUTHENTICATED', true);
             return data;
-            // if (getters.HAS_ERRORS) {
-            //     commit('SET_ERRORS', null);
-            // }
+            if (getters.HAS_ERRORS) {
+                commit('SET_ERRORS', null);
+            }
         } catch (error) {
             commit('SET_ERRORS', error.response.data);
         }

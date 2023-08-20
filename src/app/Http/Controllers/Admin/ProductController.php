@@ -3,23 +3,17 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Admin\Lead\Source\CreateLeadSourceRequest;
 use App\Http\Requests\Admin\Lead\Source\DeleteLeadSourceRequest;
-use App\Http\Requests\Admin\Lead\Source\GetLeadSourceRequest;
 use App\Http\Requests\Admin\Lead\Source\UpdateLeadSourceRequest;
 use App\Http\Requests\Admin\Product\CreateProductRequest;
 use App\Models\Permission;
 use App\Operations\Ecommerce\ProductOperation;
-use App\Operations\System\CategoryOperation;
 use App\Repositories\Category\CategoryRepositoryInterface;
-use App\Repositories\Ecommerce\ProductRepository;
 use App\Repositories\Ecommerce\ProductRepositoryInterface;
-use App\Repositories\Lead\LeadSourceRepository;
-use App\Repositories\Lead\LeadSourceRepositoryInterface;
 use App\Services\Core\CompanyProtection\CheckCompanyAccess;
 use App\Services\Core\CompanyProtection\CompanyProtectionContract;
+use App\Services\DataGrid\Sources\DataGrids\ProductDataGrid;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 use Psr\Log\LoggerInterface;
 
 class ProductController extends Controller implements CompanyProtectionContract
@@ -54,23 +48,18 @@ class ProductController extends Controller implements CompanyProtectionContract
     }
 
     /**
-     * @param Request $request
      * @return JsonResponse
      */
-    public function list(Request $request): JsonResponse
+    public function index(): JsonResponse
     {
-        $products = $this->productRepository->get();
-
-        return response()->json([
-            'products' => $products->toArray(),
-        ]);
+        return app(ProductDataGrid::class)->toJson();
     }
 
     /**
      * @param CreateProductRequest $request
      * @return JsonResponse
      */
-    public function create(
+    public function store(
         CreateProductRequest $request
     ): JsonResponse {
         $category = $this->categoryRepository->find($request->getCategoryId());
@@ -80,7 +69,10 @@ class ProductController extends Controller implements CompanyProtectionContract
             $category,
             $request->getSku(),
             $request->getName(),
-            $request->getType()
+            $request->getType(),
+            $request->getPrice(),
+            $request->getSlug(),
+            $request->getSpecialPrice(),
         );
 
         return response()->json([

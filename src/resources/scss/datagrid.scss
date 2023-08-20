@@ -31,6 +31,9 @@
         .mass_actions{
             margin-left: auto;
             display: flex;
+            > .btn:not(:last-child){
+                margin-right: 10px;
+            }
             .count_records{
                 margin-right: 25px;
             }
@@ -233,7 +236,6 @@
                 }
                 & > * {
                     white-space: nowrap;
-                    max-width: 340px;
                     overflow: hidden;
                     text-overflow: ellipsis;
                     display: block;

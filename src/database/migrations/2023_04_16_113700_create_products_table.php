@@ -18,6 +18,11 @@ return new class extends Migration
             $table->string('sku');
             $table->string('name')->nullable();
             $table->string('type');
+            $table->string('slug')->nullable();
+            $table->decimal('price', 12, 4)->nullable();
+            $table->decimal('special_price', 12, 4)->nullable();
+            $table->date('special_price_from')->nullable();
+            $table->date('special_price_to')->nullable();
             $table->unsignedBigInteger('category_id')->nullable();
             $table->unsignedBigInteger('company_id')->nullable();
             $table->timestamps();
@@ -31,21 +36,6 @@ return new class extends Migration
                 ->references('id')
                 ->on('companies')
                 ->onDelete('no action');
-        });
-
-        Schema::create('product_data', function (Blueprint $table) {
-            $table->increments('id');
-            $table->unsignedBigInteger('product_id');
-            $table->string('slug')->nullable();
-            $table->decimal('price', 12, 4)->nullable();
-            $table->decimal('special_price', 12, 4)->nullable();
-            $table->date('special_price_from')->nullable();
-            $table->date('special_price_to')->nullable();
-
-            $table->foreign('product_id')
-                ->references('id')
-                ->on('products')
-                ->onDelete('cascade');
         });
     }
 

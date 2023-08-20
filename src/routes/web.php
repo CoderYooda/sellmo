@@ -3,21 +3,6 @@
 use App\Http\Controllers\Admin;
 use Illuminate\Support\Facades\Route;
 
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| contains the "web" middleware group. Now create something great!
-|
-*/
-
-Route::get('/phpinfo', function () {
-    phpinfo();
-});
-
 Route::get('/admin{any}', function () {
     return view('admin.index');
 })->where('any', '.*');
@@ -38,6 +23,7 @@ Route::group([
 Route::group([
     'middleware' => ['company', 'auth:sanctum']
 ], function () {
+    Route::resource('categories', Admin\CategoryController::class);
     Route::group([
         'prefix'    => 'categories',
     ], function () {
@@ -95,14 +81,15 @@ Route::group([
             ->name('admin.organization.delete');
     });
 
-    Route::group([
-        'prefix'    => 'product',
-    ], function () {
-        Route::post('/', [Admin\ProductController::class, 'list'])
-            ->name('admin.product.list');
-        Route::post('/create', [Admin\ProductController::class, 'create'])
-            ->name('admin.product.create');
-    });
+    Route::resource('products', Admin\ProductController::class);
+//    Route::group([
+//        'prefix'    => 'product',
+//    ], function () {
+//        Route::post('/', [Admin\ProductController::class, 'list'])
+//            ->name('admin.product.list');
+//        Route::post('/create', [Admin\ProductController::class, 'create'])
+//            ->name('admin.product.create');
+//    });
 
     Route::group([
         'prefix'    => 'lead',

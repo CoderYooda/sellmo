@@ -132,6 +132,9 @@
                         display: flex;
                         align-items: center;
                         text-decoration: none;
+                        &.active{
+                            background: rgb(50 58 64);
+                        }
                         .link__title {
                             flex-grow: 1;
                             padding-top: 1px;

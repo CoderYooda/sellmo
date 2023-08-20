@@ -6,7 +6,7 @@
             <div class="mb-4">
                 <label class="form-label">Email</label>
                 <input v-model.trim="email" type="email" name="email" class="form-control form-control-lg" :class="[ HAS_ERROR('email') ? 'is-invalid' : '']">
-                <div v-if="HAS_ERROR('password')">{{ error.errors['email'][0] }}</div>
+                <div v-if="HAS_ERROR('email')">{{ error.errors['email'][0] }}</div>
             </div>
             <div class="mb-4">
                 <label class="form-label">Пароль</label>
@@ -15,6 +15,7 @@
             </div>
             <div><button type="submit" @click.prevent="submit()" class="btn btn-primary btn-lg w-100">Войти</button></div>
             </form>
+            <router-link :to="{name: 'register'}" class="" tag="a">Регистрация</router-link>
         </div>
     </div>
 </template>
@@ -52,7 +53,8 @@ export default {
                 email: this.email,
                 password: this.password
             });
-            if (resp && resp.status === "OK") {
+
+            if (resp && resp.status === 'ok') {
                 this.$router.push({ name: 'main'});
             }
         }

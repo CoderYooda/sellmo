@@ -12,8 +12,7 @@
                     <h1 class="h3 m-0">Товары</h1>
                 </div>
                 <div class="container__actions">
-<!--                    <router-link :to="{ name: 'page_form'}" class="btn btn-primary header_button">Добавить страницу</router-link>-->
-<!--                    <a href="#" class="btn btn-primary header_button">Добавить страницу</a>-->
+                    <router-link :to="{ name: 'ecommerce_products_new'}" class="btn btn-primary header_button">Новый товар</router-link>
                 </div>
             </div>
         </div>
